@@ -1,11 +1,14 @@
 #include "main.h"
+#include "xpsscan.h"
 
-Main::Main(QWidget *parent)
-    : QMainWindow(parent)
+int main()
 {
-}
+  QString filePath = "/home/david/code/XPSDisplay/XPSDisplay/testData.txt";
 
-Main::~Main()
-{
+  XPSScan *testScan = new XPSScan();
 
+  testScan->loadFromFile(filePath);
+
+
+  return 0;
 }

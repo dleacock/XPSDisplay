@@ -13,6 +13,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        main.cpp
+     xpsscan.cpp
 
-HEADERS  += main.h
+HEADERS  += main.h \
+    xpsscan.h
