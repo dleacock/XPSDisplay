@@ -13,7 +13,9 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-     xpsscan.cpp
+    XPSMap.cpp \
+    XPSScan.cpp
 
 HEADERS  += main.h \
-    xpsscan.h
+    XPSMap.h \
+    XPSScan.h

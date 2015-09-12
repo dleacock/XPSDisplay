@@ -1,7 +1,7 @@
 #ifndef XPSSCAN_H
 #define XPSSCAN_H
 
-#include <QList>
+#include <QVector>
 #include <QTextStream>
 #include <QDebug>
 #include <QFile>
@@ -24,19 +24,19 @@ public:
     float photonEnergy() { return photonEnergy_; }
 
     // Setters
-    void setI0(float I0);
-    void setPhotonEnergy(float energy);
+    void setI0(qreal I0);
+    void setPhotonEnergy(qreal energy);
 
 
 private:
     // Both i0 and photonEnergy (hv) are manually entered
     // ToDo: Come up with a better name for I0
-    float I0_;
-    float photonEnergy_;
+    qreal I0_;
+    qreal photonEnergy_;
 
     // kineticEnergy and detectionCounts are populated by the IGOR text file
-    QList<float> kineticEnergy_;
-    QList<float> detectionCounts_;
+    QVector<qreal> kineticEnergy_;
+    QVector<qreal> detectionCounts_;
 
 
 

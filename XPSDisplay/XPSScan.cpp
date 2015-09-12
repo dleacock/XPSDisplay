@@ -1,4 +1,4 @@
-#include "xpsscan.h"
+#include "XPSScan.h"
 #include "iostream"
 
 XPSScan::XPSScan()
@@ -39,11 +39,11 @@ void XPSScan::loadFromFile(QString filePath){
 }
 
 
-void XPSScan::setI0(float I0){
+void XPSScan::setI0(qreal I0){
     I0_ = I0;
 }
 
-void XPSScan::setPhotonEnergy(float energy){
+void XPSScan::setPhotonEnergy(qreal energy){
     photonEnergy_ = energy;
 }
 

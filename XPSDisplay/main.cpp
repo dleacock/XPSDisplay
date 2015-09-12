@@ -1,5 +1,5 @@
 #include "main.h"
-#include "xpsscan.h"
+#include "XPSScan.h"
 
 int main()
 {
