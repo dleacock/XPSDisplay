@@ -9,6 +9,15 @@ XPSScan::XPSScan()
 
 }
 
+/*
+ *  loadFromFile parsing algorithm.
+ *  1. Find the line containing [Data 1], for every file given this will always be the case that this header exists.
+ *  2. Go to next line. This line and all lines after it until the end of the file will start will a few spaces, a number, a space then the last number.
+ *  3. Find the first floating point number and store in the QVector kineticEnergy_
+ *  4. Find the next floating point number and store in QVector detectionCounts_
+ *
+ *
+*/
 void XPSScan::loadFromFile(QString filePath){
 
     qDebug() << "entering loadFromFile" << endl;
@@ -21,21 +30,35 @@ void XPSScan::loadFromFile(QString filePath){
 
         // Relevent data in IGOR file doesn't start until the head [Data 1] is displayed, the position of the header plus 14 spaces is where data starts.
         // Its presented as kinetic energy followed by a single space then the counts.
-        QString line = inputFile.readLine();
 
-        //QString dataHeader = "[Data 1]";
-        //int photonEnergyIndexPosition = line.indexOf(dataHeader) + 14;
-        //QString copyText = line.right(photonEnergyIndexPosition);
+	QString line = inputFile.readAll();
+	std::string lineString = line.toStdString();
 
-        // Current testing goal, to simply output line by line the data without storing it first
-        qDebug() << line << endl;
+
+	// Start by finding the index of the header file. Add the length of that header file (8 spaces) and this provides the starting index of all the data needed.
+	// As of sept 12 this finds all the numbers after the data header, without any regard for spacing or decimals. My current thinking is that I find the index of
+	// the first number, find the index of the next space and store that index. Use substr (size_t pos = 0, size_t len = npos) to clip out the number, convert it
+	// to qreal then store in vector. Repeat for next digit then on to the next line.
+	std::size_t indexOfDataHeader = lineString.find("[Data 1]");
+	if( indexOfDataHeader != std::string::npos){
+
+		std::size_t indexFound = lineString.find_first_of("0123456789", indexOfDataHeader + 8);
+		while(indexFound != std::string::npos){
+
+			//Find index of next space. Store that number between indexFound and indexOfSpace (not created yet)
+
+
+			indexFound = lineString.find_first_of("0123456789", indexFound + 1);
+		}
+	}
+
+	// Current testing goal: algorithm needs to recognize two numbers and have them stored
 
         // I might need to convert the QString to a std::string so I can use the standard librarys find functions to help parse
-        //std::string copyTextString = copyText.toUtf8().constData();
-
-
-
+	//std::string copyTextString = copyText.toUtf8().constData();
     }
+
+    file.close();
 }
 
 

@@ -3,7 +3,7 @@
 
 int main()
 {
-  QString filePath = "/home/david/code/XPSDisplay/XPSDisplay/testData.txt";
+  QString filePath = "/home/david/code/XPSDisplay/XPSDisplay/Au0001.txt";
 
   XPSScan *testScan = new XPSScan();
 
