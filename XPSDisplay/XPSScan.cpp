@@ -45,26 +45,23 @@ void XPSScan::loadFromFile(QString filePath){
 		std::size_t indexFound = lineString.find_first_of("0123456789", indexOfDataHeader + 8);
 		while(indexFound != std::string::npos){
 
-			//Find index of next space. Store that number between indexFound and indexOfSpace (not created yet)
-			//std::cout << lineString[indexFound] << " ";
-
 			// Currently at beginning of important data. Grab current index. Find next space, grab that index
 			std::size_t indexStartKinetic = indexFound;
 			std::size_t indexEndKinetic = lineString.find_first_of(" ", indexStartKinetic)-1;
 
-			std::string kineticString = lineString.substr(indexStartKinetic, indexEndKinetic);
+			std::string kineticString = lineString.substr(indexStartKinetic, indexEndKinetic-indexStartKinetic+1);
+
 
 			// Jump to start of next group of numbers. Get index, find and store the last index
 			std::size_t indexStartCounts = lineString.find_first_of("0123456789", indexEndKinetic+1);
 			std::size_t indexEndCounts = lineString.find_first_of('\n', indexStartCounts)-1;
 
-			std::string countsString = lineString.substr(indexStartCounts, indexEndCounts);
+			std::string countsString = lineString.substr(indexStartCounts, indexEndCounts-indexStartCounts+1);
 
-			// DEBUG: Print out the indexStart and indexEnd of both values to see if we are landing on the right spot
-			std::cout << "isk: " << lineString[indexStartKinetic] << " "
-				  << "iek: " << lineString[indexEndKinetic] << " "
-				  << "isc: " << lineString[indexStartCounts] << " "
-				  << "iec: " << lineString[indexEndCounts] << std::endl;
+			//DEBUG: output values
+			std::cout << kineticString << " " << countsString << std::endl;
+
+			//ToDo: Convert kineticString and countsString to qreal then store in vectors
 
 
 			// Update index then restart loop
@@ -73,7 +70,6 @@ void XPSScan::loadFromFile(QString filePath){
 		}
 	}
 
-	// Current testing goal: algorithm needs to recognize two numbers and have them stored
 
         // I might need to convert the QString to a std::string so I can use the standard librarys find functions to help parse
 	//std::string copyTextString = copyText.toUtf8().constData();
