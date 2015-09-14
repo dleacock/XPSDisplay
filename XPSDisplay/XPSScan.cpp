@@ -55,8 +55,8 @@ void XPSScan::loadFromFile(QString filePath){
 			std::string kineticString = lineString.substr(indexStartKinetic, indexEndKinetic);
 
 			// Jump to start of next group of numbers. Get index, find and store the last index
-			std::size_t indexStartCounts = lineString.find_first_of("0123456789", indexEndKinetic)+1;
-			std::size_t indexEndCounts = lineString.find_first_of(" ", indexStartCounts);
+			std::size_t indexStartCounts = lineString.find_first_of("0123456789", indexEndKinetic+1);
+			std::size_t indexEndCounts = lineString.find_first_of('\n', indexStartCounts)-1;
 
 			std::string countsString = lineString.substr(indexStartCounts, indexEndCounts);
 
@@ -68,7 +68,7 @@ void XPSScan::loadFromFile(QString filePath){
 
 
 			// Update index then restart loop
-			indexFound = lineString.find_first_of("0123456789", indexEndCounts);
+			indexFound = lineString.find_first_of("0123456789", indexEndCounts+1);
 
 		}
 	}
