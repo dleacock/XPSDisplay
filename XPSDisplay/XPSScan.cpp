@@ -46,9 +46,30 @@ void XPSScan::loadFromFile(QString filePath){
 		while(indexFound != std::string::npos){
 
 			//Find index of next space. Store that number between indexFound and indexOfSpace (not created yet)
+			//std::cout << lineString[indexFound] << " ";
+
+			// Currently at beginning of important data. Grab current index. Find next space, grab that index
+			std::size_t indexStartKinetic = indexFound;
+			std::size_t indexEndKinetic = lineString.find_first_of(" ", indexStartKinetic)-1;
+
+			std::string kineticString = lineString.substr(indexStartKinetic, indexEndKinetic);
+
+			// Jump to start of next group of numbers. Get index, find and store the last index
+			std::size_t indexStartCounts = lineString.find_first_of("0123456789", indexEndKinetic)+1;
+			std::size_t indexEndCounts = lineString.find_first_of(" ", indexStartCounts);
+
+			std::string countsString = lineString.substr(indexStartCounts, indexEndCounts);
+
+			// DEBUG: Print out the indexStart and indexEnd of both values to see if we are landing on the right spot
+			std::cout << "isk: " << lineString[indexStartKinetic] << " "
+				  << "iek: " << lineString[indexEndKinetic] << " "
+				  << "isc: " << lineString[indexStartCounts] << " "
+				  << "iec: " << lineString[indexEndCounts] << std::endl;
 
 
-			indexFound = lineString.find_first_of("0123456789", indexFound + 1);
+			// Update index then restart loop
+			indexFound = lineString.find_first_of("0123456789", indexEndCounts);
+
 		}
 	}
 
