@@ -36,15 +36,13 @@ void XPSScan::loadFromFile(QString filePath){
         // the first number, find the index of the next space and store that index. Use substr (size_t pos = 0, size_t len = npos) to clip out the number, convert it
         // to qreal then store in vector. Repeat for next digit then on to the next line.
 
-
         int indexOfDataHeader = line.indexOf("[Data 1]");
-        qDebug() << "indexOfDataHeader: " << indexOfDataHeader;
+
         if( indexOfDataHeader != -1){
 
             QRegExp regNum("([0-9])");
 
             int indexFound = line.indexOf(regNum, indexOfDataHeader + 8);
-
             while(indexFound != -1){
 
                 // Currently at beginning of important data. Grab current index. Find next space, grab that index
@@ -57,18 +55,18 @@ void XPSScan::loadFromFile(QString filePath){
                 int indexEndCounts = line.indexOf('\n', indexStartCounts) - 1;
                 QString countsString = line.mid(indexStartCounts, indexEndCounts-indexStartCounts + 1);
 
-                //DEBUG: output values
-                qDebug() << kineticString << " " << countsString;
+                // Convert to double the store in vector
+                qreal kineticEnergy = kineticString.toDouble();
+                qreal counts = countsString.toDouble();
 
-                //ToDo: Convert kineticString and countsString to qreal then store in vectors
-
+                kineticEnergy_.append(kineticEnergy);
+                detectionCounts_.append(counts);
 
                 // Update index then restart loop
                 indexFound = line.indexOf(regNum, indexEndCounts+1);
 
             }
         }
-
     }
 
     file.close();
