@@ -1,11 +1,12 @@
 #include "XPSMap.h"
 
-XPSMap::XPSMap()
+XPSMap::XPSMap(QList<XPSScan> scans)
 {
-
+	scans_ = scans;
 }
 
 
-void XPSMap::buildXPSMap(){
+void XPSMap::buildXPSMap()
+{
 
 }

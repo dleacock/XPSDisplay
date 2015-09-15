@@ -1,14 +1,19 @@
 #include "main.h"
 #include "XPSScan.h"
+#include "XPSDisplayWidget.h"
+#include <QApplication>
 
-int main()
+int main(int argc, char *argv[])
 {
-  QString filePath = "/home/david/code/XPSDisplay/XPSDisplay/Au0001.txt";
+	QApplication app(argc, argv);
 
-  XPSScan *testScan = new XPSScan();
+	QString filePath = "/home/david/code/XPSDisplay/XPSDisplay/Au0001.txt";
 
-  testScan->loadFromFile(filePath);
+	XPSScan *testScan = new XPSScan();
+	testScan->loadFromFile(filePath);
 
+	XPSDisplayWidget widget;
+	widget.show();
 
-  return 0;
+	return app.exec();
 }
