@@ -7,7 +7,7 @@ class XPSMap
 {
 
 public:
-	XPSMap();
+	XPSMap(QList<XPSScan> scans);
 
 	void buildXPSMap();
 	QList<XPSScan> scans() { return scans_; }
