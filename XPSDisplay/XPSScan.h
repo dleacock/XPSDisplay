@@ -5,6 +5,7 @@
 #include <QTextStream>
 #include <QDebug>
 #include <QFile>
+#include <QStringList>
 
 /// This defines a single XPS Scan, the information that will populate this class will come from an IGOR text file
 
@@ -20,7 +21,7 @@ public:
     void loadFromFile(QString filePath);
 
     // Getters
-    float I0() { return I0_; }
+    float incomingPhotons() { return incomingPhotons_; }
     float photonEnergy() { return photonEnergy_; }
 
     // Setters
@@ -31,7 +32,7 @@ public:
 private:
     // Both i0 and photonEnergy (hv) are manually entered
     // ToDo: Come up with a better name for I0
-    qreal I0_;
+    qreal incomingPhotons_;
     qreal photonEnergy_;
 
     // kineticEnergy and detectionCounts are populated by the IGOR text file
