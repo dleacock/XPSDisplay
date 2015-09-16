@@ -32,7 +32,8 @@ void XPSScan::loadFromFile(QString filePath){
     }
 
     file.close();
-
+    // Need to know number of points collected so the map knows how big to be
+    numberOfPoints = kineticEnergy_.count();
 }
 
 void XPSScan::setI0(qreal incomingPhotons){

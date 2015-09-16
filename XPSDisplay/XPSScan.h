@@ -23,6 +23,7 @@ public:
     // Getters
     float incomingPhotons() { return incomingPhotons_; }
     float photonEnergy() { return photonEnergy_; }
+    int numOfPoints() { return numberOfPoints_; }
 
     // Setters
     void setI0(qreal I0);
@@ -38,6 +39,8 @@ private:
     // kineticEnergy and detectionCounts are populated by the IGOR text file
     QVector<qreal> kineticEnergy_;
     QVector<qreal> detectionCounts_;
+
+    int numberOfPoints_;
 
 
 
