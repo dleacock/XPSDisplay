@@ -4,14 +4,6 @@
 XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 	QWidget(parent)
 {
-	// This is for testing purposes. Adding an image to show location of 2DMap
-    //QPixmap testMapImage("/home/david/code/XPSDisplay/XPSDisplay/image.jpg");
-    //QPixmap testMapImageScaled = testMapImage.scaled(QSize(400, 400), Qt::KeepAspectRatio);
-
-	// This will be removed and replaced by Mplot widget
-    //imageLabel_ = new QLabel(this);
-    //imageLabel_->setPixmap(testMapImageScaled);
-
     // ToDo: Add Mplot widgets and plots, create a test map
     plotView_ = new MPlotWidget;
     plotView_->enableAntiAliasing(true);
@@ -33,16 +25,18 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 
     // FILL 2D data here using test values
     data2D_ = new MPlotSimpleImageData(1024, 1024);
-    qreal tempValues = 100;
-    data2D_->setXValues(1, 1024, &tempValues);
-    data2D_->setYValues(1, 1024, &tempValues);
-    for(int yy=0; yy<1023; yy++) {
-             for(int xx=0; xx<1023; xx++) {
+
+    QVector<qreal> tempValue = QVector<qreal>(1024);
+    for (int i = 0; i < 1024; i++)
+        tempValue[i] = i;
+    data2D_->setXValues(0, 1023, tempValue.data());
+    data2D_->setYValues(0, 1023, tempValue.data());
+    for(int yy=0; yy<1024; yy++) {
+             for(int xx=0; xx<1024; xx++) {
                  qreal x = data2D_->x(xx);
                  qreal y = data2D_->y(yy);
                  qreal r2 = x*x + y*y;
-                 //data2D_->setZ(exp(-r2/0.1), xx, yy);
-                 data2D_->setZ(sin(x*4*M_PI)*sin(y*2*M_PI), xx, yy);
+                 data2D_->setZ(xx, yy, r2);
              }
          }
 
@@ -50,10 +44,9 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
     plot2d->setColorMap(MPlotColorMap::Jet);
     plot_->addItem(plot2d);
 
-
     // Enable autoscaling of both axes.
-    //plot_->axisScaleLeft()->setAutoScaleEnabled();
-    //plot_->axisScaleBottom()->setAutoScaleEnabled();
+    plot_->axisScaleLeft()->setAutoScaleEnabled();
+    plot_->axisScaleBottom()->setAutoScaleEnabled();
 
     // Enable some convenient zoom tools.
     plotView_->setPlot(plot_);
@@ -69,9 +62,6 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
     // Set the autoscale constraints.
     plot_->axisScaleLeft()->setDataRangeConstraint(MPlotAxisRange(0, MPLOT_POS_INFINITY));
 
-
-
-
 	scanListWidget_ = new QListWidget(this);
 	addScanButton_ = new QPushButton("Add Scan", this);
 	removeScanButton_ = new QPushButton("Remove Scan", this);
@@ -82,8 +72,6 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 	panelLayout_ = new QVBoxLayout;
 	mapLayout_ = new QVBoxLayout;
 
-	// Replace with MPlot widget
-    //mapLayout_->addWidget(imageLabel_);
     mapLayout_->addWidget(plotView_);
 
 	buttonsLayout_->addWidget(addScanButton_);
