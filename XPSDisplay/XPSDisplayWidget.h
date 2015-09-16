@@ -7,6 +7,12 @@
 #include <QPushButton>
 #include <QListWidget>
 
+#include "MPlot/MPlotWidget.h"
+#include "MPlot/MPlot.h"
+#include "MPlot/MPlotImageData.h"
+#include "MPlot/MPlotImage.h"
+
+
 
 class XPSDisplayWidget : public QWidget
 {
@@ -35,6 +41,18 @@ protected:
 
 	// Testing purposes, dummy image for map
 	QLabel *imageLabel_;
+
+    // MPlot widget that holds plot
+    MPlotWidget *plotView_;
+    // The actual plot itself
+    MPlot *plot_;
+    // 2D Data for image
+    MPlotSimpleImageData *data2D_;
+    // Image to be given to plot
+    MPlotImageBasic *plot2D_;
+
+
+
 
 };
 
