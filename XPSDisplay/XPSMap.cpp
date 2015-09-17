@@ -2,12 +2,13 @@
 
 XPSMap::XPSMap(QList<XPSScan> scans)
 {
+
     scans_ = scans;
 
     for(int i = 0; i < scans.count(); i++)
         dataSize_ += scans[i].numOfPoints();
 
-    data2D_ = MPlotSimpleImageData(dataSize_, dataSize_);
+    data2D_ = new MPlotSimpleImageData(dataSize_, dataSize_);
 
 }
 
@@ -20,19 +21,24 @@ void XPSMap::buildXPSMap()
     QVector<qreal> tempKineticValues = QVector<qreal>(dataSize_);
     QVector<qreal> tempCountsValues = QVector<qreal>(dataSize_);
 
-    for(int i = 0; i < scans.count(); i++){
-        for(int j = 0; j < scans[i].numOfPoints; j++){
+    //This value will run from 0 to dataSize_
+    int tempIndex = 0;
+    for(int i = 0; i < scans_->count(); i++){
+	for(int j = 0; j < scans_[i]->numOfPoints; j++){
 
-            // ToDo: Need to add a getter for XPSScan kinetic/counts
-            // pass those getter'd values into temp vectors
+		// ToDo: Need to add a getter for XPSScan kinetic/counts
+		// pass those getter'd values into temp vectors
+		tempKineticValues[tempIndex] = scans_[i]->kineticEnergy(j);
+		tempCountsValues[tempIndex] = scans_[i]->detectionCount(j);
 
+		tempIndex++;
 
         }
     }
 
     // ToDo: Double check notes as to what axes values need to be
-    data2D_->setXValues(0,dataSize_-1, tempKineticValues);
-    data2D_->setYValues(0,dataSize_-1, tempCountsValues);
+    data2D_->setXValues(0,dataSize_-1, tempKineticValues.data());
+    data2D_->setYValues(0,dataSize_-1, tempCountsValues.data());
 
 
 }

@@ -25,6 +25,10 @@ public:
     float photonEnergy() { return photonEnergy_; }
     int numOfPoints() { return numberOfPoints_; }
 
+    qreal kineticEnergy(int index) { return kineticEnergy_[index]; }
+    qreal detectionCount(int index) { return detectionCounts_[index]; }
+
+
     // Setters
     void setI0(qreal I0);
     void setPhotonEnergy(qreal energy);
