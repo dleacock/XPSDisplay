@@ -1,5 +1,6 @@
 #include "XPSDisplayWidget.h"
 #include <QPixmap>
+#include <QFileDialog>
 
 XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 	QWidget(parent)
@@ -24,6 +25,7 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
     plot_->setMarginTop(2);
 
     // FILL 2D data here using test values
+    // This will be removed and replaced with data from XPSMap
     data2D_ = new MPlotSimpleImageData(1024, 1024);
 
     QVector<qreal> tempValue = QVector<qreal>(1024);
@@ -86,6 +88,23 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 
 	setLayout(mainLayout_);
 
+    connect(addScanButton_, SIGNAL(clicked()), this, SLOT(openFileDialog()));
+
+
 }
 
 
+void XPSDisplayWidget::openFileDialog(){
+
+    // Add new scan dialog
+    // I need to make this customized so it has a field for the I0 and hv value
+
+    //ToDo:  Instead of this opening a QFileDialog directly it should open
+    // a new window that has a two fields for data, and a "find file" button.
+    // this find file button will then opne a QFileDialog
+
+
+    fileName_ = QFileDialog::getOpenFileName(this, tr("Add New Scan"),"/home/",
+                                             tr("Text (*.txt)"));
+
+}

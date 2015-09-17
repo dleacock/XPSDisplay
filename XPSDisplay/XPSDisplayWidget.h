@@ -22,6 +22,7 @@ public:
 signals:
 
 public slots:
+    void openFileDialog();
 
 protected:
 	QHBoxLayout *mainLayout_;
@@ -50,6 +51,10 @@ protected:
     MPlotSimpleImageData *data2D_;
     // Image to be given to plot
     MPlotImageBasic *plot2D_;
+
+    // ToDo: Add new scan dialog window
+    // needs to include fields to input I0 and hv
+    QString fileName_;
 
 
 

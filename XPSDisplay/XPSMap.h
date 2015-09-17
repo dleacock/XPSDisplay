@@ -14,7 +14,7 @@ class XPSMap
 {
 
 public:
-	XPSMap(QList<XPSScan> scans);
+    XPSMap(QList<XPSScan> *scans);
 
 	void buildXPSMap();
 	QList<XPSScan> *scans() const { return scans_; }

@@ -3,7 +3,7 @@
 
 XPSScan::XPSScan()
 {
-    //Testing purposes using generic data
+    //Testing purposes using generic data.
     incomingPhotons_ = 10.0;
     photonEnergy_ = 10.0;
 
@@ -19,7 +19,7 @@ void XPSScan::loadFromFile(QString filePath){
 
     while(!inputFile.atEnd()){
 
-        QString line = inputFile.readLine();
+    QString line = inputFile.readLine();
 	if(line == ("[Data 1]")){
 
             while(!inputFile.atEnd()){
@@ -33,7 +33,7 @@ void XPSScan::loadFromFile(QString filePath){
 
     file.close();
     // Need to know number of points collected so the map knows how big to be
-    numberOfPoints = kineticEnergy_.count();
+    numberOfPoints_ = kineticEnergy_.count();
 }
 
 void XPSScan::setI0(qreal incomingPhotons){

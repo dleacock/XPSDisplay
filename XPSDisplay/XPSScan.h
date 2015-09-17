@@ -21,12 +21,12 @@ public:
     void loadFromFile(QString filePath);
 
     // Getters
-    float incomingPhotons() { return incomingPhotons_; }
-    float photonEnergy() { return photonEnergy_; }
-    int numOfPoints() { return numberOfPoints_; }
+    float incomingPhotons() const { return incomingPhotons_; }
+    float photonEnergy() const { return photonEnergy_; }
+    int numOfPoints() const { return numberOfPoints_; }
 
-    qreal kineticEnergy(int index) { return kineticEnergy_[index]; }
-    qreal detectionCount(int index) { return detectionCounts_[index]; }
+    qreal kineticEnergy(int index) const { return kineticEnergy_[index]; }
+    qreal detectionCount(int index) const { return detectionCounts_[index]; }
 
 
     // Setters
@@ -35,8 +35,7 @@ public:
 
 
 private:
-    // Both i0 and photonEnergy (hv) are manually entered
-    // ToDo: Come up with a better name for I0
+    // Both i0 and photonEnergy (hv) are manually entered from GUI
     qreal incomingPhotons_;
     qreal photonEnergy_;
 
