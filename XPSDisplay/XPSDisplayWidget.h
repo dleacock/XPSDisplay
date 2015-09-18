@@ -6,6 +6,8 @@
 #include <QLayout>
 #include <QPushButton>
 #include <QListWidget>
+#include <QDialog>
+#include <QLineEdit>
 
 #include "MPlot/MPlotWidget.h"
 #include "MPlot/MPlot.h"
@@ -23,6 +25,7 @@ signals:
 
 public slots:
     void openFileDialog();
+    void findFile();
 
 protected:
 	QHBoxLayout *mainLayout_;
@@ -54,6 +57,16 @@ protected:
 
     // ToDo: Add new scan dialog window
     // needs to include fields to input I0 and hv
+    QDialog *addScanDialog_;
+    // Photon energy
+    QLineEdit *addPhotonEnergy_;
+    // Incident photon amount
+    QLineEdit *addI0_;
+    // Find scan button to open QFileDialog
+    QPushButton *findScanButton_;
+
+
+
     QString fileName_;
 
 

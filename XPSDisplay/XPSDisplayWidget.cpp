@@ -91,20 +91,40 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
     connect(addScanButton_, SIGNAL(clicked()), this, SLOT(openFileDialog()));
 
 
+
 }
 
 
 void XPSDisplayWidget::openFileDialog(){
 
     // Add new scan dialog
-    // I need to make this customized so it has a field for the I0 and hv value
+    addScanDialog_ = new QDialog(this);
 
-    //ToDo:  Instead of this opening a QFileDialog directly it should open
-    // a new window that has a two fields for data, and a "find file" button.
-    // this find file button will then opne a QFileDialog
+    addPhotonEnergy_ = new QLineEdit("Photon Energy");
+    addI0_ = new QLineEdit("Incident Photons");
+    findScanButton_ = new QPushButton("Find Scan");
 
 
-    fileName_ = QFileDialog::getOpenFileName(this, tr("Add New Scan"),"/home/",
-                                             tr("Text (*.txt)"));
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->addWidget(addPhotonEnergy_);
+    layout->addWidget(addI0_);
+    layout->addWidget(findScanButton_);
+
+    addScanDialog_->setLayout(layout);
+
+    connect(findScanButton_, SIGNAL(clicked()), this, SLOT(findFile()));
+
+    addScanDialog_->exec();
+
+
+
+}
+
+// Opens a new QFileDialog
+// ToDo: grab XPS scan text file thats selected and add it to the XPSMap list of scans
+void XPSDisplayWidget::findFile(){
+
+
+    fileName_ = QFileDialog::getOpenFileName(this, tr("Add New Scan"),"/home/", tr("Text (*.txt)"));
 
 }
