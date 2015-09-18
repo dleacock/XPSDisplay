@@ -1,12 +1,12 @@
 #include "XPSMap.h"
 
-XPSMap::XPSMap(QList<XPSScan> *scans)
+XPSMap::XPSMap(QList<XPSScan*> scans)
 {
 
     scans_ = scans;
 
-    for(int i = 0; i < scans_->count(); i++)
-        dataSize_ += scans_->at(i).numOfPoints();
+    for(int i = 0; i < scans_.count(); i++)
+        dataSize_ += scans_.at(i)->numOfPoints();
 
     data2D_ = new MPlotSimpleImageData(dataSize_, dataSize_);
 
@@ -24,14 +24,14 @@ void XPSMap::buildXPSMap()
 
     //This value will run from 0 to dataSize_
     int tempIndex = 0;
-    for(int i = 0; i < scans_->count(); i++){
-    for(int j = 0; j < scans_->at(i).numOfPoints(); j++){
+    for(int i = 0; i < scans_.count(); i++){
+    for(int j = 0; j < scans_.at(i)->numOfPoints(); j++){
 
         // kinetic and counts are index based as each measurement is different
         // however photon energy changes per full scan
-        tempKineticValues[tempIndex] = scans_->at(i).kineticEnergy(j);
-        tempCountsValues[tempIndex] = scans_->at(i).detectionCount(j);
-        tempPhotonValues[tempIndex] = scans_->at(i).photonEnergy();
+        tempKineticValues[tempIndex] = scans_.at(i)->kineticEnergy(j);
+        tempCountsValues[tempIndex] = scans_.at(i)->detectionCount(j);
+        tempPhotonValues[tempIndex] = scans_.at(i)->photonEnergy();
 
         // Setting the Z while in the loop instead of laying down as a vector when I'm done
         // since I'm not sure at what index each scan starts and stops at.

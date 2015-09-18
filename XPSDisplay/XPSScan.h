@@ -25,8 +25,8 @@ public:
     float photonEnergy() const { return photonEnergy_; }
     int numOfPoints() const { return numberOfPoints_; }
 
-    qreal kineticEnergy(int index) const { return kineticEnergy_[index]; }
-    qreal detectionCount(int index) const { return detectionCounts_[index]; }
+    qreal kineticEnergy(int index) const { return kineticEnergy_.at(index); }
+    qreal detectionCount(int index) const { return detectionCounts_.at(index); }
 
 
     // Setters
