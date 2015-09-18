@@ -66,7 +66,6 @@ protected:
     QPushButton *findScanButton_;
 
 
-
     QString fileName_;
 
 

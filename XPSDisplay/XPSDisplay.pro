@@ -38,7 +38,8 @@ SOURCES += main.cpp\
  /home/david/code/XPSDisplay/XPSDisplay/MPlot/MPlotRectangle.cpp \
  /home/david/code/XPSDisplay/XPSDisplay/MPlot/MPlotMarkerTransparentVerticalRectangle.cpp \
  /home/david/code/XPSDisplay/XPSDisplay/MPlot/MPlotColorLegend.cpp \
- /home/david/code/XPSDisplay/XPSDisplay/MPlot/MPlotImageRangeDialog.cpp
+ /home/david/code/XPSDisplay/XPSDisplay/MPlot/MPlotImageRangeDialog.cpp \
+    XPSMapViewModel.cpp
 
 HEADERS  += main.h \
     XPSMap.h \
@@ -62,5 +63,6 @@ HEADERS  += main.h \
  /home/david/code/XPSDisplay/XPSDisplay/MPlot/MPlotRectangle.h \
  /home/david/code/XPSDisplay/XPSDisplay/MPlot/MPlotMarkerTransparentVerticalRectangle.h \
  /home/david/code/XPSDisplay/XPSDisplay/MPlot/MPlotColorLegend.h \
- /home/david/code/XPSDisplay/XPSDisplay/MPlot/MPlotImageRangeDialog.h
+ /home/david/code/XPSDisplay/XPSDisplay/MPlot/MPlotImageRangeDialog.h \
+    XPSMapViewModel.h
 

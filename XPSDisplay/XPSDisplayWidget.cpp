@@ -104,7 +104,6 @@ void XPSDisplayWidget::openFileDialog(){
     addI0_ = new QLineEdit("Incident Photons");
     findScanButton_ = new QPushButton("Find Scan");
 
-
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addWidget(addPhotonEnergy_);
     layout->addWidget(addI0_);
@@ -115,7 +114,6 @@ void XPSDisplayWidget::openFileDialog(){
     connect(findScanButton_, SIGNAL(clicked()), this, SLOT(findFile()));
 
     addScanDialog_->exec();
-
 
 
 }
