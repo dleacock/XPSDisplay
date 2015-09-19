@@ -28,8 +28,11 @@ public:
     void scanName();
     // returns the XPSMap to who requested it, in this case the XPSDisplayWidget
     void map();
+    // read all xps scans given into a list, this request will come from the widget
+    void loadScansFromFiles();
     // function will be iterated over all scans, it loads each scan into XPSMap class to build map
-    void loadScanFromFile();
+    void loadScanIntoMap();
+
 
 
 private:
