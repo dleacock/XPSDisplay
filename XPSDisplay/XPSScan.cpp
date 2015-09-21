@@ -6,6 +6,7 @@ XPSScan::XPSScan(qreal i0, qreal hv, QString filePath)
 
     incomingPhotons_ = i0;
     photonEnergy_ = hv;
+    filePath_ = filePath;
     loadFromFile(filePath);
 
 

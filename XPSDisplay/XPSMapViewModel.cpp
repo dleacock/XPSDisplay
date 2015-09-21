@@ -12,15 +12,13 @@ XPSMapViewModel::XPSMapViewModel()
 // then store it in the QList<XPSScan *>
 void XPSMapViewModel::loadScansFromFiles(qreal i0, qreal hv, QString fileName)
 {
-	//Create QList<XPSScan *> here
 	XPSScan *scan = new XPSScan(i0, hv, fileName);
-	scans_.push_back(scan);
+	scans_.push_back(scan);	
 }
 
 
 void XPSMapViewModel::loadScanIntoMap()
 {
-	// Create XPSMap here
 	map_ = new XPSMap(scans_);
 }
 

@@ -95,34 +95,62 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 
     connect(addScanButton_, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(this, SIGNAL(scanAdded()), this, SLOT(updateList()));
+    connect(removeScanButton_, SIGNAL(clicked()), this, SLOT(removeScan()));
 
 
 
 }
 
-
+// ToDo: This looks better but need to set a size limit on the
+// QLabels.  Also need some icon system of an X or a checkmark to show
+// that an acceptable value has been put in.
 void XPSDisplayWidget::openFileDialog(){
 
     // Add new scan dialog
     addScanDialog_ = new QDialog(this);
 
-    addPhotonEnergy_ = new QLineEdit("Photon Energy");
-    addI0_ = new QLineEdit("Incident Photons");
+    // Should I move this to the constructor? Is it ok that
+    // these widgets get created, and I assume destroyed, when the
+    // window opens and closes?
+    i0Label_ = new QLabel("I0: ");
+    addPhotonEnergy_ = new QLineEdit("0");
+    hvLabel_ = new QLabel("Photon Energy: ");
+    addI0_ = new QLineEdit("0");
     findScanButton_ = new QPushButton("Find Scan");
     addFileName_ = new QLineEdit("File Selected");
     addScan_ = new QPushButton("Add this scan");
 
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(addPhotonEnergy_);
-    layout->addWidget(addI0_);
-    layout->addWidget(findScanButton_);
-    layout->addWidget(addFileName_);
-    layout->addWidget(addScan_);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QHBoxLayout *subLayout = new QHBoxLayout;
+    QVBoxLayout *paramLayout = new QVBoxLayout;
 
-    addScanDialog_->setLayout(layout);
+    QHBoxLayout *i0Layout = new QHBoxLayout;
+    i0Layout->addWidget(i0Label_);
+    i0Layout->addWidget(addI0_);
+
+    QHBoxLayout *hvLayout = new QHBoxLayout;
+    hvLayout->addWidget(hvLabel_);
+    hvLayout->addWidget(addPhotonEnergy_);
+
+    QHBoxLayout *fileLayout = new QHBoxLayout;
+    fileLayout->addWidget(addFileName_);
+    fileLayout->addWidget(findScanButton_);
+
+    paramLayout->addLayout(i0Layout);
+    paramLayout->addLayout(hvLayout);
+
+    subLayout->addLayout(paramLayout);
+    subLayout->addSpacing(100);
+    subLayout->addWidget(addScan_);
+
+    mainLayout->addLayout(fileLayout);
+    mainLayout->addLayout(subLayout);
+
+    addScanDialog_->setLayout(mainLayout);
 
     connect(findScanButton_, SIGNAL(clicked()), this, SLOT(findFile()));
     connect(addScan_, SIGNAL(clicked()), this, SLOT(addScan()));
+
     addScanDialog_->exec();
 
 
@@ -156,7 +184,11 @@ void XPSDisplayWidget::addScan()
 void XPSDisplayWidget::removeScan()
 {
 	//Remove scan from list widget
+	scanListWidget_->takeItem(numberOfScans_-1);
+	numberOfScans_--;
+
 	//Remove scan from QList<XPS>
+	// model needs ability to remove a scan
 
 }
 
@@ -172,8 +204,6 @@ void XPSDisplayWidget::updateList()
 	// Using a global variable to track number of scans for sole
 	// purpose of knowing the index value of the top scan.
 	// I could create a getter in the model to know the number of scans too
+	scanListWidget_->addItem(model_->scanName(numberOfScans_-1));
 
-	//ToDo: Fix this, file name isnt passing.
-	//scanListWidget_->addItem(model_->scanName(numberOfScans_-1));
-	scanListWidget_->addItem("file added");
 }

@@ -73,6 +73,9 @@ protected:
 	QLineEdit *addFileName_;
 	// Add current scan
 	QPushButton *addScan_;
+	// Labels fir i0 and hv
+	QLabel *i0Label_;
+	QLabel *hvLabel_;
 
 
 	QString fileName_;
