@@ -16,16 +16,16 @@ class XPSMap
 public:
     XPSMap(QList<XPSScan*> scans);
 
-	void buildXPSMap();
+    void buildXPSMap();
     QList<XPSScan*> scans() const { return scans_; }
-	MPlotSimpleImageData *data() const { return data2D_; }
+    MPlotSimpleImageData *data() const { return data2D_; }
 
 private:
     QList<XPSScan*> scans_;
-	MPlotSimpleImageData *data2D_;
+    MPlotSimpleImageData *data2D_;
 
-	// Each scan consists of a series of scans, this number is that total.
-	int dataSize_;
+    // Each scan consists of a series of scans, this number is that total.
+    int dataSize_;
 
 };
 

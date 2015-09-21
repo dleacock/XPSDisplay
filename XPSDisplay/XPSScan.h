@@ -15,7 +15,7 @@ class XPSScan
 
 public:
     // Constructor
-    XPSScan();
+    XPSScan(qreal i0, qreal hv, QString filePath);
 
     // Loads IGOR text file and populates member variables. It finds the beginning of the data and fills the kineticEnergy and detectionCounts list.
     void loadFromFile(QString filePath);
@@ -24,7 +24,7 @@ public:
     float incomingPhotons() const { return incomingPhotons_; }
     float photonEnergy() const { return photonEnergy_; }
     int numOfPoints() const { return numberOfPoints_; }
-
+    QString filePath() const { return filePath_; }
     qreal kineticEnergy(int index) const { return kineticEnergy_.at(index); }
     qreal detectionCount(int index) const { return detectionCounts_.at(index); }
 
@@ -44,6 +44,8 @@ private:
     QVector<qreal> detectionCounts_;
 
     int numberOfPoints_;
+
+    QString filePath_;
 
 
 

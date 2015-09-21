@@ -1,11 +1,13 @@
 #include "XPSScan.h"
 
 
-XPSScan::XPSScan()
+XPSScan::XPSScan(qreal i0, qreal hv, QString filePath)
 {
-    //Testing purposes using generic data.
-    incomingPhotons_ = 10.0;
-    photonEnergy_ = 10.0;
+
+    incomingPhotons_ = i0;
+    photonEnergy_ = hv;
+    loadFromFile(filePath);
+
 
 }
 

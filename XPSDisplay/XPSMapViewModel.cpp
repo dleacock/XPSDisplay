@@ -3,26 +3,28 @@
 
 XPSMapViewModel::XPSMapViewModel()
 {
-	// I only want a XPSMapViewModel created after files have been selected to use. These functions will be used to create instances of QList<XPSScan> and XPSMap
-	loadScansFromFiles();
-	loadScanIntoMap();
+
 
 }
 
 // This will be provided a list (QString file names?) and iterater
 // through each value on the list, create an XPS scan for each one
 // then store it in the QList<XPSScan *>
-void XPSMapViewModel::loadScansFromFiles()
+void XPSMapViewModel::loadScansFromFiles(qreal i0, qreal hv, QString fileName)
 {
 	//Create QList<XPSScan *> here
-
-
+	XPSScan *scan = new XPSScan(i0, hv, fileName);
+	scans_.push_back(scan);
 }
 
 
 void XPSMapViewModel::loadScanIntoMap()
 {
 	// Create XPSMap here
-
+	map_ = new XPSMap(scans_);
 }
 
+QString XPSMapViewModel::scanName(int index)
+{
+	return scans_.at(index)->filePath();
+}

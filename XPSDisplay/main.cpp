@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
 
 	QString filePath = "/home/david/code/XPSDisplay/XPSDisplay/Au0001.txt";
 
-	XPSScan *testScan = new XPSScan();
-	testScan->loadFromFile(filePath);
+	XPSScan *testScan = new XPSScan(10, 10, filePath);
+	//testScan->loadFromFile(filePath);
 
 	XPSDisplayWidget widget;
 	widget.show();

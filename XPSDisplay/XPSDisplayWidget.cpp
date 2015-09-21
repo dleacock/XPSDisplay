@@ -5,6 +5,11 @@
 XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 	QWidget(parent)
 {
+	model_ = new XPSMapViewModel();
+
+	numberOfScans_ = 0;
+
+
     // ToDo: Add Mplot widgets and plots, create a test map
     plotView_ = new MPlotWidget;
     plotView_->enableAntiAliasing(true);
@@ -89,6 +94,7 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 	setLayout(mainLayout_);
 
     connect(addScanButton_, SIGNAL(clicked()), this, SLOT(openFileDialog()));
+    connect(this, SIGNAL(scanAdded()), this, SLOT(updateList()));
 
 
 
@@ -103,16 +109,20 @@ void XPSDisplayWidget::openFileDialog(){
     addPhotonEnergy_ = new QLineEdit("Photon Energy");
     addI0_ = new QLineEdit("Incident Photons");
     findScanButton_ = new QPushButton("Find Scan");
+    addFileName_ = new QLineEdit("File Selected");
+    addScan_ = new QPushButton("Add this scan");
 
-    QHBoxLayout *layout = new QHBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(addPhotonEnergy_);
     layout->addWidget(addI0_);
     layout->addWidget(findScanButton_);
+    layout->addWidget(addFileName_);
+    layout->addWidget(addScan_);
 
     addScanDialog_->setLayout(layout);
 
     connect(findScanButton_, SIGNAL(clicked()), this, SLOT(findFile()));
-
+    connect(addScan_, SIGNAL(clicked()), this, SLOT(addScan()));
     addScanDialog_->exec();
 
 
@@ -122,7 +132,48 @@ void XPSDisplayWidget::openFileDialog(){
 // ToDo: grab XPS scan text file thats selected and add it to the XPSMap list of scans
 void XPSDisplayWidget::findFile(){
 
-
     fileName_ = QFileDialog::getOpenFileName(this, tr("Add New Scan"),"/home/", tr("Text (*.txt)"));
+    addFileName_->setText(fileName_);
 
+}
+
+void XPSDisplayWidget::addScan()
+{
+	//ToDo: add a check to make sure all values are valid/exist
+	// This check should take place in the dialog and not here
+
+	qreal hv_ = addPhotonEnergy_->text().toDouble();
+	qreal i0_ = addI0_->text().toDouble();
+
+	model_->loadScansFromFiles(i0_, hv_, fileName_);
+
+	//update the list of files
+	numberOfScans_++;
+	emit scanAdded();
+	addScanDialog_->close();
+}
+
+void XPSDisplayWidget::removeScan()
+{
+	//Remove scan from list widget
+	//Remove scan from QList<XPS>
+
+}
+
+
+void XPSDisplayWidget::displayMap()
+{
+	//Send the XPSMap to the MPlot stuff
+
+}
+
+void XPSDisplayWidget::updateList()
+{
+	// Using a global variable to track number of scans for sole
+	// purpose of knowing the index value of the top scan.
+	// I could create a getter in the model to know the number of scans too
+
+	//ToDo: Fix this, file name isnt passing.
+	//scanListWidget_->addItem(model_->scanName(numberOfScans_-1));
+	scanListWidget_->addItem("file added");
 }

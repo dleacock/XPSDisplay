@@ -14,6 +14,7 @@
 #include "MPlot/MPlotImageData.h"
 #include "MPlot/MPlotImage.h"
 
+#include "XPSMapViewModel.h"
 
 
 class XPSDisplayWidget : public QWidget
@@ -22,10 +23,14 @@ class XPSDisplayWidget : public QWidget
 public:
 	XPSDisplayWidget(QWidget *parent = 0);
 signals:
-
+	void scanAdded();
 public slots:
     void openFileDialog();
     void findFile();
+    void addScan();
+    void removeScan();
+    void displayMap();
+    void updateList();
 
 protected:
 	QHBoxLayout *mainLayout_;
@@ -46,28 +51,35 @@ protected:
 	// Testing purposes, dummy image for map
 	QLabel *imageLabel_;
 
-    // MPlot widget that holds plot
-    MPlotWidget *plotView_;
-    // The actual plot itself
-    MPlot *plot_;
-    // 2D Data for image
-    MPlotSimpleImageData *data2D_;
-    // Image to be given to plot
-    MPlotImageBasic *plot2D_;
+	// MPlot widget that holds plot
+	MPlotWidget *plotView_;
+	// The actual plot itself
+	MPlot *plot_;
+	// 2D Data for image
+	MPlotSimpleImageData *data2D_;
+	// Image to be given to plot
+	MPlotImageBasic *plot2D_;
 
-    // ToDo: Add new scan dialog window
-    // needs to include fields to input I0 and hv
-    QDialog *addScanDialog_;
-    // Photon energy
-    QLineEdit *addPhotonEnergy_;
-    // Incident photon amount
-    QLineEdit *addI0_;
-    // Find scan button to open QFileDialog
-    QPushButton *findScanButton_;
+	// ToDo: Add new scan dialog window
+	// needs to include fields to input I0 and hv
+	QDialog *addScanDialog_;
+	// Photon energy
+	QLineEdit *addPhotonEnergy_;
+	// Incident photon amount
+	QLineEdit *addI0_;
+	// Find scan button to open QFileDialog
+	QPushButton *findScanButton_;
+	// The current selected file to be addeds path
+	QLineEdit *addFileName_;
+	// Add current scan
+	QPushButton *addScan_;
 
 
-    QString fileName_;
+	QString fileName_;
 
+	XPSMapViewModel *model_;
+
+	int numberOfScans_;
 
 
 
