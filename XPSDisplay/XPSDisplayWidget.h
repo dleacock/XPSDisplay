@@ -31,6 +31,7 @@ public slots:
     void removeScan();
     void displayMap();
     void updateList();
+    void checkParam();
 
 protected:
 	QHBoxLayout *mainLayout_;
@@ -77,6 +78,11 @@ protected:
 	QLabel *i0Label_;
 	QLabel *hvLabel_;
 
+	// Icon to show if params are acceptable
+	QLabel *paramStatusI0_;
+	bool i0Approved_;
+	QLabel *paramStatusHV_;
+	bool hvApproved_;
 
 	QString fileName_;
 

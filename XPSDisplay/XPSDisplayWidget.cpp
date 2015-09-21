@@ -108,14 +108,29 @@ void XPSDisplayWidget::openFileDialog(){
 
     // Add new scan dialog
     addScanDialog_ = new QDialog(this);
+    addScanDialog_->setFixedSize(380, 120);
+
+    i0Approved_ = false;
+    hvApproved_ = false;
 
     // Should I move this to the constructor? Is it ok that
     // these widgets get created, and I assume destroyed, when the
     // window opens and closes?
     i0Label_ = new QLabel("I0: ");
-    addPhotonEnergy_ = new QLineEdit("0");
-    hvLabel_ = new QLabel("Photon Energy: ");
+    i0Label_->setFixedWidth(20);
     addI0_ = new QLineEdit("0");
+    addI0_->setFixedWidth(75);
+    paramStatusI0_ = new QLabel();
+    paramStatusI0_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
+
+    hvLabel_ = new QLabel("hv: ");
+    hvLabel_->setFixedWidth(20);
+    addPhotonEnergy_ = new QLineEdit("0");
+    addPhotonEnergy_->setFixedWidth(75);
+    paramStatusHV_ = new QLabel();
+    paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
+
+
     findScanButton_ = new QPushButton("Find Scan");
     addFileName_ = new QLineEdit("File Selected");
     addScan_ = new QPushButton("Add this scan");
@@ -127,10 +142,14 @@ void XPSDisplayWidget::openFileDialog(){
     QHBoxLayout *i0Layout = new QHBoxLayout;
     i0Layout->addWidget(i0Label_);
     i0Layout->addWidget(addI0_);
+    i0Layout->addWidget(paramStatusI0_);
+    i0Layout->setAlignment(Qt::AlignLeft);
 
     QHBoxLayout *hvLayout = new QHBoxLayout;
     hvLayout->addWidget(hvLabel_);
     hvLayout->addWidget(addPhotonEnergy_);
+    hvLayout->addWidget(paramStatusHV_);
+    hvLayout->setAlignment(Qt::AlignLeft);
 
     QHBoxLayout *fileLayout = new QHBoxLayout;
     fileLayout->addWidget(addFileName_);
@@ -140,7 +159,6 @@ void XPSDisplayWidget::openFileDialog(){
     paramLayout->addLayout(hvLayout);
 
     subLayout->addLayout(paramLayout);
-    subLayout->addSpacing(100);
     subLayout->addWidget(addScan_);
 
     mainLayout->addLayout(fileLayout);
@@ -150,6 +168,8 @@ void XPSDisplayWidget::openFileDialog(){
 
     connect(findScanButton_, SIGNAL(clicked()), this, SLOT(findFile()));
     connect(addScan_, SIGNAL(clicked()), this, SLOT(addScan()));
+    connect(addI0_, SIGNAL(editingFinished()), this, SLOT(checkParam()));
+    connect(addPhotonEnergy_, SIGNAL(editingFinished()), this, SLOT(checkParam()));
 
     addScanDialog_->exec();
 
@@ -169,6 +189,7 @@ void XPSDisplayWidget::addScan()
 {
 	//ToDo: add a check to make sure all values are valid/exist
 	// This check should take place in the dialog and not here
+
 
 	qreal hv_ = addPhotonEnergy_->text().toDouble();
 	qreal i0_ = addI0_->text().toDouble();
@@ -207,3 +228,43 @@ void XPSDisplayWidget::updateList()
 	scanListWidget_->addItem(model_->scanName(numberOfScans_-1));
 
 }
+
+
+void XPSDisplayWidget::checkParam()
+{
+
+	if(addPhotonEnergy_->text().toDouble() > 0)
+		  paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/checkmark21.png").pixmap(20));
+	else
+		  paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
+
+	if(addI0_->text().toDouble())
+		  paramStatusI0_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/checkmark21.png").pixmap(20));
+	else
+		  paramStatusI0_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
