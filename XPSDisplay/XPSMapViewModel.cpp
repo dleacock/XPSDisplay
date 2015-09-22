@@ -26,3 +26,8 @@ QString XPSMapViewModel::scanName(int index)
 {
 	return scans_.at(index)->filePath();
 }
+
+void XPSMapViewModel::removeScan()
+{
+	scans_.pop_back();
+}

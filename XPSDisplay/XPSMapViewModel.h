@@ -35,7 +35,8 @@ public:
     void loadScansFromFiles(qreal i0, qreal hv, QString fileName);
     // function will be iterated over all scans, it loads each scan into XPSMap class to build map
     void loadScanIntoMap();
-
+    // remove a scan from the list as requested by the widget
+    void removeScan();
 
 
 private:

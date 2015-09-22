@@ -19,6 +19,7 @@ public:
     void buildXPSMap();
     QList<XPSScan*> scans() const { return scans_; }
     MPlotSimpleImageData *data() const { return data2D_; }
+    int dataSize() const { return dataSize_; }
 
 private:
     QList<XPSScan*> scans_;

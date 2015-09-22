@@ -80,9 +80,7 @@ protected:
 
 	// Icon to show if params are acceptable
 	QLabel *paramStatusI0_;
-	bool i0Approved_;
 	QLabel *paramStatusHV_;
-	bool hvApproved_;
 
 	QString fileName_;
 

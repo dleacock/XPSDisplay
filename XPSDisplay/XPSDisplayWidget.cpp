@@ -31,6 +31,8 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 
     // FILL 2D data here using test values
     // This will be removed and replaced with data from XPSMap
+
+    /*
     data2D_ = new MPlotSimpleImageData(1024, 1024);
 
     QVector<qreal> tempValue = QVector<qreal>(1024);
@@ -50,15 +52,18 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
     MPlotImageBasic* plot2d = new MPlotImageBasic(data2D_);
     plot2d->setColorMap(MPlotColorMap::Jet);
     plot_->addItem(plot2d);
+    */
 
     // Enable autoscaling of both axes.
     plot_->axisScaleLeft()->setAutoScaleEnabled();
     plot_->axisScaleBottom()->setAutoScaleEnabled();
 
+
     // Enable some convenient zoom tools.
     plotView_->setPlot(plot_);
     plotView_->setMinimumHeight(450);
     plotView_->setMinimumWidth(600);
+
 
     // Set the number of ticks.  A balance between readability and being practical.
     plot_->axisBottom()->setTicks(3);
@@ -96,22 +101,17 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
     connect(addScanButton_, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(this, SIGNAL(scanAdded()), this, SLOT(updateList()));
     connect(removeScanButton_, SIGNAL(clicked()), this, SLOT(removeScan()));
+    connect(createMapButton_, SIGNAL(clicked()), this, SLOT(displayMap()));
 
 
 
 }
 
-// ToDo: This looks better but need to set a size limit on the
-// QLabels.  Also need some icon system of an X or a checkmark to show
-// that an acceptable value has been put in.
 void XPSDisplayWidget::openFileDialog(){
 
     // Add new scan dialog
     addScanDialog_ = new QDialog(this);
     addScanDialog_->setFixedSize(380, 120);
-
-    i0Approved_ = false;
-    hvApproved_ = false;
 
     // Should I move this to the constructor? Is it ok that
     // these widgets get created, and I assume destroyed, when the
@@ -187,10 +187,6 @@ void XPSDisplayWidget::findFile(){
 
 void XPSDisplayWidget::addScan()
 {
-	//ToDo: add a check to make sure all values are valid/exist
-	// This check should take place in the dialog and not here
-
-
 	qreal hv_ = addPhotonEnergy_->text().toDouble();
 	qreal i0_ = addI0_->text().toDouble();
 
@@ -206,17 +202,28 @@ void XPSDisplayWidget::removeScan()
 {
 	//Remove scan from list widget
 	scanListWidget_->takeItem(numberOfScans_-1);
-	numberOfScans_--;
 
 	//Remove scan from QList<XPS>
-	// model needs ability to remove a scan
+	model_->removeScan();
+
+	numberOfScans_--;
 
 }
 
-
+//ToDo: This needs to be tested. Fix XPSScan algorithm first.
 void XPSDisplayWidget::displayMap()
 {
 	//Send the XPSMap to the MPlot stuff
+	int size = model_->map()->dataSize();
+	MPlotSimpleImageData *data = new MPlotSimpleImageData(size, size);
+	data = model_->map()->data();
+
+	MPlotImageBasic* plot2d = new MPlotImageBasic(data);
+	plot2d->setColorMap(MPlotColorMap::Jet);
+	plot_->addItem(plot2d);
+
+	plotView_->setPlot(plot_);
+
 
 }
 
@@ -229,7 +236,8 @@ void XPSDisplayWidget::updateList()
 
 }
 
-
+// Dummy icons for now
+// ToDo: Remove ability to add scan until both params are approved
 void XPSDisplayWidget::checkParam()
 {
 
@@ -245,26 +253,3 @@ void XPSDisplayWidget::checkParam()
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -18,6 +18,8 @@ public:
     XPSScan(qreal i0, qreal hv, QString filePath);
 
     // Loads IGOR text file and populates member variables. It finds the beginning of the data and fills the kineticEnergy and detectionCounts list.
+    // ToDo: This algorithm needs to be fixed. At the end of every IGOR file, after the data is done, there is a blank space. This function needs
+    // to account for that.
     void loadFromFile(QString filePath);
 
     // Getters
