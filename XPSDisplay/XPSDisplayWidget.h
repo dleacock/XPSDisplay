@@ -22,6 +22,8 @@ class XPSDisplayWidget : public QWidget
 	Q_OBJECT
 public:
 	XPSDisplayWidget(QWidget *parent = 0);
+    ~XPSDisplayWidget();
+
 signals:
 	void scanAdded();
 public slots:

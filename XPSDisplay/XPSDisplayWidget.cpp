@@ -9,6 +9,7 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 
 	numberOfScans_ = 0;
 
+    addScanDialog_ = 0;
 
     // ToDo: Add Mplot widgets and plots, create a test map
     plotView_ = new MPlotWidget;
@@ -113,66 +114,67 @@ void XPSDisplayWidget::openFileDialog(){
     addScanDialog_ = new QDialog(this);
     addScanDialog_->setFixedSize(380, 120);
 
-    // Should I move this to the constructor? Is it ok that
-    // these widgets get created, and I assume destroyed, when the
-    // window opens and closes?
-    i0Label_ = new QLabel("I0: ");
-    i0Label_->setFixedWidth(20);
-    addI0_ = new QLineEdit("0");
-    addI0_->setFixedWidth(75);
-    paramStatusI0_ = new QLabel();
-    paramStatusI0_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
+    if(addScanDialog_){
 
-    hvLabel_ = new QLabel("hv: ");
-    hvLabel_->setFixedWidth(20);
-    addPhotonEnergy_ = new QLineEdit("0");
-    addPhotonEnergy_->setFixedWidth(75);
-    paramStatusHV_ = new QLabel();
-    paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
+        // Should I move this to the constructor? Is it ok that
+        // these widgets get created, and I assume destroyed, when the
+        // window opens and closes?
+        i0Label_ = new QLabel("I0: ");
+        i0Label_->setFixedWidth(20);
+        addI0_ = new QLineEdit("0");
+        addI0_->setFixedWidth(75);
+        paramStatusI0_ = new QLabel();
+        paramStatusI0_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
 
+        hvLabel_ = new QLabel("hv: ");
+        hvLabel_->setFixedWidth(20);
+        addPhotonEnergy_ = new QLineEdit("0");
+        addPhotonEnergy_->setFixedWidth(75);
+        paramStatusHV_ = new QLabel();
+        paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
 
-    findScanButton_ = new QPushButton("Find Scan");
-    addFileName_ = new QLineEdit("File Selected");
-    addScan_ = new QPushButton("Add this scan");
+        findScanButton_ = new QPushButton("Find Scan");
+        addFileName_ = new QLineEdit("File Selected");
+        addScan_ = new QPushButton("Add this scan");
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    QHBoxLayout *subLayout = new QHBoxLayout;
-    QVBoxLayout *paramLayout = new QVBoxLayout;
+        QVBoxLayout *mainLayout = new QVBoxLayout;
+        QHBoxLayout *subLayout = new QHBoxLayout;
+        QVBoxLayout *paramLayout = new QVBoxLayout;
 
-    QHBoxLayout *i0Layout = new QHBoxLayout;
-    i0Layout->addWidget(i0Label_);
-    i0Layout->addWidget(addI0_);
-    i0Layout->addWidget(paramStatusI0_);
-    i0Layout->setAlignment(Qt::AlignLeft);
+        QHBoxLayout *i0Layout = new QHBoxLayout;
+        i0Layout->addWidget(i0Label_);
+        i0Layout->addWidget(addI0_);
+        i0Layout->addWidget(paramStatusI0_);
+        i0Layout->setAlignment(Qt::AlignLeft);
 
-    QHBoxLayout *hvLayout = new QHBoxLayout;
-    hvLayout->addWidget(hvLabel_);
-    hvLayout->addWidget(addPhotonEnergy_);
-    hvLayout->addWidget(paramStatusHV_);
-    hvLayout->setAlignment(Qt::AlignLeft);
+        QHBoxLayout *hvLayout = new QHBoxLayout;
+        hvLayout->addWidget(hvLabel_);
+        hvLayout->addWidget(addPhotonEnergy_);
+        hvLayout->addWidget(paramStatusHV_);
+        hvLayout->setAlignment(Qt::AlignLeft);
 
-    QHBoxLayout *fileLayout = new QHBoxLayout;
-    fileLayout->addWidget(addFileName_);
-    fileLayout->addWidget(findScanButton_);
+        QHBoxLayout *fileLayout = new QHBoxLayout;
+        fileLayout->addWidget(addFileName_);
+        fileLayout->addWidget(findScanButton_);
 
-    paramLayout->addLayout(i0Layout);
-    paramLayout->addLayout(hvLayout);
+        paramLayout->addLayout(i0Layout);
+        paramLayout->addLayout(hvLayout);
 
-    subLayout->addLayout(paramLayout);
-    subLayout->addWidget(addScan_);
+        subLayout->addLayout(paramLayout);
+        subLayout->addWidget(addScan_);
 
-    mainLayout->addLayout(fileLayout);
-    mainLayout->addLayout(subLayout);
+        mainLayout->addLayout(fileLayout);
+        mainLayout->addLayout(subLayout);
 
-    addScanDialog_->setLayout(mainLayout);
+        addScanDialog_->setLayout(mainLayout);
 
-    connect(findScanButton_, SIGNAL(clicked()), this, SLOT(findFile()));
-    connect(addScan_, SIGNAL(clicked()), this, SLOT(addScan()));
-    connect(addI0_, SIGNAL(editingFinished()), this, SLOT(checkParam()));
-    connect(addPhotonEnergy_, SIGNAL(editingFinished()), this, SLOT(checkParam()));
+        connect(findScanButton_, SIGNAL(clicked()), this, SLOT(findFile()));
+        connect(addScan_, SIGNAL(clicked()), this, SLOT(addScan()));
+        connect(addI0_, SIGNAL(editingFinished()), this, SLOT(checkParam()));
+        connect(addPhotonEnergy_, SIGNAL(editingFinished()), this, SLOT(checkParam()));
 
-    addScanDialog_->exec();
-
+        addScanDialog_->exec();
+    }
 
 }
 
@@ -252,4 +254,12 @@ void XPSDisplayWidget::checkParam()
 		  paramStatusI0_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
 
 
+}
+
+XPSDisplayWidget::~XPSDisplayWidget()
+{
+    if (addScanDialog_){
+        addScanDialog_->deleteLater();
+        addScanDialog_ = 0;
+    }
 }
