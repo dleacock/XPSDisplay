@@ -13,7 +13,7 @@ XPSMapViewModel::XPSMapViewModel()
 void XPSMapViewModel::loadScansFromFiles(qreal i0, qreal hv, QString fileName)
 {
 	XPSScan *scan = new XPSScan(i0, hv, fileName);
-	scans_.push_back(scan);	
+    scans_.append(scan);
 }
 
 
@@ -29,5 +29,5 @@ QString XPSMapViewModel::scanName(int index)
 
 void XPSMapViewModel::removeScan()
 {
-	scans_.pop_back();
+    scans_.removeLast();
 }
