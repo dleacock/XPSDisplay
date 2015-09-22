@@ -20,6 +20,7 @@ void XPSMapViewModel::loadScansFromFiles(qreal i0, qreal hv, QString fileName)
 void XPSMapViewModel::loadScanIntoMap()
 {
 	map_ = new XPSMap(scans_);
+    map_->buildXPSMap();
 }
 
 QString XPSMapViewModel::scanName(int index)

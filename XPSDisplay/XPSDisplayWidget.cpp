@@ -181,7 +181,9 @@ void XPSDisplayWidget::openFileDialog(){
 // ToDo: grab XPS scan text file thats selected and add it to the XPSMap list of scans
 void XPSDisplayWidget::findFile(){
 
-    fileName_ = QFileDialog::getOpenFileName(this, tr("Add New Scan"),"/home/", tr("Text (*.txt)"));
+    //Testing purposes, just go right to my igor directory
+    fileName_ = QFileDialog::getOpenFileName(this, tr("Add New Scan"),"/home/david/Desktop/Au", tr("Text (*.txt)"));
+    //fileName_ = QFileDialog::getOpenFileName(this, tr("Add New Scan"),"/home/", tr("Text (*.txt)"));
     addFileName_->setText(fileName_);
 
 }
@@ -215,8 +217,14 @@ void XPSDisplayWidget::removeScan()
 void XPSDisplayWidget::displayMap()
 {
 	//Send the XPSMap to the MPlot stuff
+    model_->loadScanIntoMap();
+
+
 	int size = model_->map()->dataSize();
-	MPlotSimpleImageData *data = new MPlotSimpleImageData(size, size);
+    qDebug() << "XPSDisplayWidget:  model_->map()->dataSize() : " << size;
+
+
+    MPlotSimpleImageData *data = new MPlotSimpleImageData(size, size);
 	data = model_->map()->data();
 
 	MPlotImageBasic* plot2d = new MPlotImageBasic(data);
@@ -224,6 +232,7 @@ void XPSDisplayWidget::displayMap()
 	plot_->addItem(plot2d);
 
 	plotView_->setPlot(plot_);
+
 
 
 }

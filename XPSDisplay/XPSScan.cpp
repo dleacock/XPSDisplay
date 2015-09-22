@@ -22,21 +22,20 @@ void XPSScan::loadFromFile(QString filePath){
 
     while(!inputFile.atEnd()){
 
-    QString line = inputFile.readLine();
-	if(line == ("[Data 1]")){
+        QString line = inputFile.readLine();
+        if(line == ("[Data 1]")){
 
-            while(!inputFile.atEnd()){
+             while(!inputFile.atEnd()){
                  QString temp = inputFile.readLine();
-		 // Last line of IGOR file is a blank space.
-		 // ToDo: Test this out.
-		 if(temp.isEmpty())
-			 break;
-		 else{
-			 QStringList tempList = temp.split(" ", QString::SkipEmptyParts);
-			 kineticEnergy_.append(tempList.at(0).toDouble());
-			 detectionCounts_.append((tempList.at(1).toDouble()/incomingPhotons_));
-		 }
-	    }
+                 // Last line of IGOR file is a blank space.
+                if(temp.isEmpty())
+                     break;
+                 else{
+                     QStringList tempList = temp.split(" ", QString::SkipEmptyParts);
+                     kineticEnergy_.append(tempList.at(0).toDouble());
+                     detectionCounts_.append((tempList.at(1).toDouble()/incomingPhotons_));
+                 }
+            }
         }
     }
 
