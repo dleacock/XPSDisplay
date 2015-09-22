@@ -172,10 +172,9 @@ void XPSDisplayWidget::openFileDialog(){
         connect(addScan_, SIGNAL(clicked()), this, SLOT(addScan()));
         connect(addI0_, SIGNAL(editingFinished()), this, SLOT(checkParam()));
         connect(addPhotonEnergy_, SIGNAL(editingFinished()), this, SLOT(checkParam()));
-
-        addScanDialog_->exec();
     }
 
+    addScanDialog_->exec();
 }
 
 // Opens a new QFileDialog
