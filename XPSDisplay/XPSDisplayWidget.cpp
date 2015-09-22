@@ -193,7 +193,7 @@ void XPSDisplayWidget::addScan()
 	qreal hv_ = addPhotonEnergy_->text().toDouble();
 	qreal i0_ = addI0_->text().toDouble();
 
-	model_->loadScansFromFiles(i0_, hv_, fileName_);
+	model_->loadScansFromFilesNormalize(i0_, hv_, fileName_);
 
 	//update the list of files
 	numberOfScans_++;

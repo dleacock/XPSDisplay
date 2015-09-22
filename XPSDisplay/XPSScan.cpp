@@ -12,6 +12,18 @@ XPSScan::XPSScan(qreal i0, qreal hv, QString filePath)
 
 }
 
+XPSScan::XPSScan(qreal hv, QString filePath)
+{
+    // If I set this to 1 I can keep loadFromFile unchanged. If I remove it then I would need to add some check for whether or not
+// normalization has been checked. Not sure which is computationally cheaper. My guess is the former.
+    incomingPhotons_ = 1;
+    photonEnergy_ = hv;
+    filePath_ = filePath;
+    loadFromFile(filePath);
+
+
+}
+
 // Relevent data in IGOR file doesn't start until the head [Data 1] is displayed, the position of the header plus 14 spaces is where data starts.
 // Its presented as kinetic energy followed by a single space then the counts.
 void XPSScan::loadFromFile(QString filePath){

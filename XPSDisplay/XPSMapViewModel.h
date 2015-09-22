@@ -18,7 +18,7 @@
 // The XPSDisplayWidget will ask the model to load the scans into the map.
 // The map will be given to the widget for display.
 
-
+//ToDo:  Add distinction between normalized and non
 class XPSMapViewModel
 {
 public:
@@ -32,7 +32,9 @@ public:
 
 
     // create new xps scan from params and add it to QList<XPSScan>
-    void loadScansFromFiles(qreal i0, qreal hv, QString fileName);
+    void loadScansFromFilesNormalize(qreal i0, qreal hv, QString fileName);
+    // use this when given a batch of files with no normalization
+    void loadScanFromFiles(qreal hv, QString fileName);
     // function will be iterated over all scans, it loads each scan into XPSMap class to build map
     void loadScanIntoMap();
     // remove a scan from the list as requested by the widget
