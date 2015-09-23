@@ -16,6 +16,17 @@ void XPSMapViewModel::loadScansFromFilesNormalize(qreal i0, qreal hv, QString fi
     scans_.append(scan);
 }
 
+void XPSMapViewModel::loadScanFromFiles(qreal hv, QStringList files)
+{
+    for(int i = 0; i < files.count(); i++)
+    {
+        XPSScan *scan = new XPSScan(hv, files.at(i));
+        scans_.append(scan);
+    }
+    qDebug() << "XPSMapViewModel:: scans_.count " << scans_.count();
+
+}
+
 
 void XPSMapViewModel::loadScanIntoMap()
 {
