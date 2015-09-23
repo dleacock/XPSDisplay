@@ -4,11 +4,9 @@ XPSMap::XPSMap(QList<XPSScan*> scans)
 {
     dataSize_ = 0;
     scans_ = scans;
-    qDebug() << "XPSMap::scans_.count() " << scans_.count();
 
     for(int i = 0; i < scans_.count(); i++)
         dataSize_ += scans_.at(i)->numOfPoints();
-    qDebug() << "XPSMap::dataSize_ " << dataSize_;
     data2D_ = new MPlotSimpleImageData(dataSize_, dataSize_);
 
 }

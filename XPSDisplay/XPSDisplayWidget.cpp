@@ -10,6 +10,7 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 	numberOfScans_ = 0;
 
     addScanDialog_ = 0;
+    optionDialog_ = 0;
 
     // ToDo: Add Mplot widgets and plots, create a test map
     plotView_ = new MPlotWidget;
@@ -99,7 +100,7 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 
 	setLayout(mainLayout_);
 
-    connect(addScanButton_, SIGNAL(clicked()), this, SLOT(openFileDialog()));
+    connect(addScanButton_, SIGNAL(clicked()), this, SLOT(alertDialog()));
     connect(this, SIGNAL(scanAdded()), this, SLOT(updateList()));
     connect(removeScanButton_, SIGNAL(clicked()), this, SLOT(removeScan()));
     connect(createMapButton_, SIGNAL(clicked()), this, SLOT(displayMap()));
@@ -108,7 +109,40 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 
 }
 
-void XPSDisplayWidget::openFileDialog(){
+void XPSDisplayWidget::alertDialog()
+{
+	optionDialog_ = new QDialog(this);
+	optionDialog_->setFixedSize(320, 100);
+
+	if(optionDialog_){
+		normalButton_ = new QPushButton("normal");
+		batchButton_ = new QPushButton("batch");
+		infoText_ = new QLabel("This is a description of what I'm saying.");
+
+		QVBoxLayout *mainLayout = new QVBoxLayout;
+		QHBoxLayout *subLayout = new QHBoxLayout;
+
+		subLayout->addWidget(normalButton_);
+		subLayout->addWidget(batchButton_);
+
+		mainLayout->addWidget(infoText_);
+		mainLayout->addLayout(subLayout);
+
+		optionDialog_->setLayout(mainLayout);
+
+		connect(normalButton_, SIGNAL(clicked()), this, SLOT(openFileDialogNormalize()));
+
+	}
+	optionDialog_->exec();
+}
+
+void XPSDisplayWidget::openFileDialogBatch()
+{
+
+
+}
+//ToDo: User needs to remain in this dialog until all the files they want have been added.
+void XPSDisplayWidget::openFileDialogNormalize(){
 
     // Add new scan dialog
     addScanDialog_ = new QDialog(this);
@@ -178,7 +212,6 @@ void XPSDisplayWidget::openFileDialog(){
 }
 
 // Opens a new QFileDialog
-// ToDo: grab XPS scan text file thats selected and add it to the XPSMap list of scans
 void XPSDisplayWidget::findFile(){
 
     //Testing purposes, just go right to my igor directory
@@ -213,7 +246,6 @@ void XPSDisplayWidget::removeScan()
 
 }
 
-//ToDo: This needs to be tested. Fix XPSScan algorithm first.
 void XPSDisplayWidget::displayMap()
 {
 	//Send the XPSMap to the MPlot stuff
@@ -269,5 +301,9 @@ XPSDisplayWidget::~XPSDisplayWidget()
     if (addScanDialog_){
         addScanDialog_->deleteLater();
         addScanDialog_ = 0;
+    }
+    if (optionDialog_){
+	optionDialog_->deleteLater();
+	optionDialog_ = 0;
     }
 }

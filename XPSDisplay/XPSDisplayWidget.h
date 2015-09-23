@@ -8,6 +8,7 @@
 #include <QListWidget>
 #include <QDialog>
 #include <QLineEdit>
+#include <QTextEdit>
 
 #include "MPlot/MPlotWidget.h"
 #include "MPlot/MPlot.h"
@@ -27,13 +28,15 @@ public:
 signals:
 	void scanAdded();
 public slots:
-    void openFileDialog();
+    void openFileDialogNormalize();
+    void openFileDialogBatch();
     void findFile();
     void addScan();
     void removeScan();
     void displayMap();
     void updateList();
     void checkParam();
+    void alertDialog();
 
 protected:
 	QHBoxLayout *mainLayout_;
@@ -62,6 +65,16 @@ protected:
 	MPlotSimpleImageData *data2D_;
 	// Image to be given to plot
 	MPlotImageBasic *plot2D_;
+
+	// Let user select which option they want. There might be a better way to prompt them that doesn't require a new dialog
+	QDialog *optionDialog_;
+	// Select normalized
+	QPushButton *normalButton_;
+	// Select not normalized and do a batch add
+	QPushButton *batchButton_;
+	// A description of the options
+	QLabel *infoText_;
+
 
 	// ToDo: Add new scan dialog window
 	// needs to include fields to input I0 and hv
