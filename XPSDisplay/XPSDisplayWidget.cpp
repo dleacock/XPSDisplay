@@ -9,30 +9,30 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 
 	numberOfScans_ = 0;
 
-    addScanDialog_ = 0;
-    optionDialog_ = 0;
-    batchAddScanDialog_ = 0;
+	addScanDialog_ = 0;
+	optionDialog_ = 0;
+	batchAddScanDialog_ = 0;
 
-    normalized = false;
+	normalized = false;
 
-    // ToDo: Add Mplot widgets and plots, create a test map
-    plotView_ = new MPlotWidget;
-    plotView_->enableAntiAliasing(true);
+	// ToDo: Add Mplot widgets and plots, create a test map
+	plotView_ = new MPlotWidget;
+	plotView_->enableAntiAliasing(true);
 
-    // Create plot and set up axes. These are all dummy values for testing
-    plot_ = new MPlot;
-    plot_->axisBottom()->setAxisNameFont(QFont("Helvetica", 6));
-    plot_->axisBottom()->setTickLabelFont(QFont("Helvetica", 6));
-    plot_->axisBottom()->setAxisName("x-axis");
-    plot_->axisLeft()->setAxisNameFont(QFont("Helvetica", 6));
-    plot_->axisLeft()->setTickLabelFont(QFont("Helvetica", 6));
-    plot_->axisLeft()->setAxisName("y-axis");
+	// Create plot and set up axes. These are all dummy values for testing
+	plot_ = new MPlot;
+	plot_->axisBottom()->setAxisNameFont(QFont("Helvetica", 6));
+	plot_->axisBottom()->setTickLabelFont(QFont("Helvetica", 6));
+	plot_->axisBottom()->setAxisName("x-axis");
+	plot_->axisLeft()->setAxisNameFont(QFont("Helvetica", 6));
+	plot_->axisLeft()->setTickLabelFont(QFont("Helvetica", 6));
+	plot_->axisLeft()->setAxisName("y-axis");
 
-    // Set the margins for the plot. Test values
-    plot_->setMarginLeft(10);
-    plot_->setMarginBottom(15);
-    plot_->setMarginRight(2);
-    plot_->setMarginTop(2);
+	// Set the margins for the plot. Test values
+	plot_->setMarginLeft(10);
+	plot_->setMarginBottom(15);
+	plot_->setMarginRight(2);
+	plot_->setMarginTop(2);
 
     // FILL 2D data here using test values
     // This will be removed and replaced with data from XPSMap
@@ -59,25 +59,25 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
     plot_->addItem(plot2d);
     */
 
-    // Enable autoscaling of both axes.
-    plot_->axisScaleLeft()->setAutoScaleEnabled();
-    plot_->axisScaleBottom()->setAutoScaleEnabled();
+	// Enable autoscaling of both axes.
+	plot_->axisScaleLeft()->setAutoScaleEnabled();
+	plot_->axisScaleBottom()->setAutoScaleEnabled();
 
 
-    // Enable some convenient zoom tools.
-    plotView_->setPlot(plot_);
-    plotView_->setMinimumHeight(450);
-    plotView_->setMinimumWidth(600);
+	// Enable some convenient zoom tools.
+	plotView_->setPlot(plot_);
+	plotView_->setMinimumHeight(450);
+	plotView_->setMinimumWidth(600);
 
 
-    // Set the number of ticks.  A balance between readability and being practical.
-    plot_->axisBottom()->setTicks(3);
-    plot_->axisTop()->setTicks(0);
-    plot_->axisLeft()->setTicks(4);
-    plot_->axisRight()->setTicks(0);
+	// Set the number of ticks.  A balance between readability and being practical.
+	plot_->axisBottom()->setTicks(3);
+	plot_->axisTop()->setTicks(0);
+	plot_->axisLeft()->setTicks(4);
+	plot_->axisRight()->setTicks(0);
 
-    // Set the autoscale constraints.
-    plot_->axisScaleLeft()->setDataRangeConstraint(MPlotAxisRange(0, MPLOT_POS_INFINITY));
+	// Set the autoscale constraints.
+	plot_->axisScaleLeft()->setDataRangeConstraint(MPlotAxisRange(0, MPLOT_POS_INFINITY));
 
 	scanListWidget_ = new QListWidget(this);
 	addScanButton_ = new QPushButton("Add Scan", this);
@@ -89,7 +89,7 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 	panelLayout_ = new QVBoxLayout;
 	mapLayout_ = new QVBoxLayout;
 
-    mapLayout_->addWidget(plotView_);
+	mapLayout_->addWidget(plotView_);
 
 	buttonsLayout_->addWidget(addScanButton_);
 	buttonsLayout_->addWidget(removeScanButton_);
@@ -103,11 +103,11 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 
 	setLayout(mainLayout_);
 
-    connect(addScanButton_, SIGNAL(clicked()), this, SLOT(alertDialog()));
-    connect(this, SIGNAL(scanAdded()), this, SLOT(updateList()));
-    connect(this, SIGNAL(batchScansAdded()), this, SLOT(updateListFromBatch()));
-    connect(removeScanButton_, SIGNAL(clicked()), this, SLOT(removeScan()));
-    connect(createMapButton_, SIGNAL(clicked()), this, SLOT(displayMap()));
+	connect(addScanButton_, SIGNAL(clicked()), this, SLOT(alertDialog()));
+	connect(this, SIGNAL(scanAdded()), this, SLOT(updateList()));
+	connect(this, SIGNAL(batchScansAdded()), this, SLOT(updateListFromBatch()));
+	connect(removeScanButton_, SIGNAL(clicked()), this, SLOT(removeScan()));
+	connect(createMapButton_, SIGNAL(clicked()), this, SLOT(displayMap()));
 
 
 
@@ -120,22 +120,22 @@ void XPSDisplayWidget::alertDialog()
         optionDialog_->setFixedSize(320, 100);
 
         normalButton_ = new QPushButton("normal");
-		batchButton_ = new QPushButton("batch");
-		infoText_ = new QLabel("This is a description of what I'm saying.");
+	batchButton_ = new QPushButton("batch");
+	infoText_ = new QLabel("This is a description of what I'm saying.");
 
-		QVBoxLayout *mainLayout = new QVBoxLayout;
-		QHBoxLayout *subLayout = new QHBoxLayout;
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	QHBoxLayout *subLayout = new QHBoxLayout;
 
-		subLayout->addWidget(normalButton_);
-		subLayout->addWidget(batchButton_);
+	subLayout->addWidget(normalButton_);
+	subLayout->addWidget(batchButton_);
 
-		mainLayout->addWidget(infoText_);
-		mainLayout->addLayout(subLayout);
+	mainLayout->addWidget(infoText_);
+	mainLayout->addLayout(subLayout);
 
-		optionDialog_->setLayout(mainLayout);
+	optionDialog_->setLayout(mainLayout);
 
-		connect(normalButton_, SIGNAL(clicked()), this, SLOT(openFileDialogNormalize()));
-        connect(batchButton_, SIGNAL(clicked()), this, SLOT(openFileDialogBatch()));
+	connect(normalButton_, SIGNAL(clicked()), this, SLOT(openFileDialogNormalize()));
+	connect(batchButton_, SIGNAL(clicked()), this, SLOT(openFileDialogBatch()));
 
     }
 	optionDialog_->exec();
@@ -156,6 +156,12 @@ void XPSDisplayWidget::openFileDialogBatch()
         hvLabel_->setFixedWidth(20);
         photonEnergyStep_ = new QLineEdit("0");
         photonEnergyStep_->setFixedWidth(75);
+
+	photonEnergyStartLabel_ = new QLabel("hv initial: ");
+	photonEnergyStartLabel_->setFixedWidth(35);
+	photonEnergyStart_ = new QLineEdit("0");
+	photonEnergyStart_->setFixedWidth(75);
+
         paramStatusHV_ = new QLabel();
         paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
 
@@ -171,6 +177,8 @@ void XPSDisplayWidget::openFileDialogBatch()
 
         hvLayout->addWidget(hvLabel_);
         hvLayout->addWidget(photonEnergyStep_);
+	hvLayout->addWidget(photonEnergyStartLabel_);
+	hvLayout->addWidget(photonEnergyStart_);
         hvLayout->addWidget(paramStatusHV_);
 
         panelLayout->addLayout(hvLayout);
@@ -268,39 +276,39 @@ void XPSDisplayWidget::openFileDialogNormalize(){
 
 void XPSDisplayWidget::findBatchFiles()
 {
-    QFileDialog dialog(this);
-    dialog.setDirectory("/home/david/Desktop/Au");
-    dialog.setFileMode(QFileDialog::ExistingFiles);
-    dialog.setNameFilter(tr("Text (*.txt)"));
-    if(dialog.exec())
-    {
-        fileNames_ = new QStringList(dialog.selectedFiles());
-        listOfScans_->addItems(*fileNames_);
-        numberOfScans_ = fileNames_->count();
+	QFileDialog dialog(this);
+	dialog.setDirectory("/home/david/Desktop/Au");
+	dialog.setFileMode(QFileDialog::ExistingFiles);
+	dialog.setNameFilter(tr("Text (*.txt)"));
+	if(dialog.exec())
+	{
+		fileNames_ = new QStringList(dialog.selectedFiles());
+		listOfScans_->addItems(*fileNames_);
+		numberOfScans_ = fileNames_->count();
 
-        dialog.close();
-        //Need to load scans into a model first, or they wont be able to be displayed in primary widget
-        // setting hv to 1 for testing.
+		dialog.close();
+		//Need to load scans into a model first, or they wont be able to be displayed in primary widget
+		// setting hv to 1 for testing.
 
-    }
+	}
 }
 
-
+// ToDo: this function needs to take into account an incrimentally increase hv values
 void XPSDisplayWidget::addBatchScans()
 {
-    qreal hvStep_ = photonEnergyStep_->text().toDouble();
-    model_->loadScanFromFiles(hvStep_, *fileNames_);
-    batchAddScanDialog_->close();
-    emit batchScansAdded();
+	qreal hvStep_ = photonEnergyStep_->text().toDouble();
+	model_->loadScanFromFiles(hvStep_, *fileNames_);
+	batchAddScanDialog_->close();
+	emit batchScansAdded();
 }
 
 
 // Opens a new QFileDialog
 void XPSDisplayWidget::findFile(){
 
-    // Go right to my personal Au scan directory. ToDo: Set to /home/ on release
-    fileName_ = QFileDialog::getOpenFileName(this, tr("Add New Scan"),"/home/david/Desktop/Au", tr("Text (*.txt)"));
-    addFileName_->setText(fileName_);
+	// Go right to my personal Au scan directory. ToDo: Set to /home/ on release
+	fileName_ = QFileDialog::getOpenFileName(this, tr("Add New Scan"),"/home/david/Desktop/Au", tr("Text (*.txt)"));
+	addFileName_->setText(fileName_);
 
 }
 
@@ -332,11 +340,11 @@ void XPSDisplayWidget::removeScan()
 void XPSDisplayWidget::displayMap()
 {
 	//Send the XPSMap to the MPlot stuff
-    model_->loadScanIntoMap();
+	model_->loadScanIntoMap();
 
-    int size = model_->map()->dataSize();
+	int size = model_->map()->dataSize();
 
-    MPlotSimpleImageData *data = new MPlotSimpleImageData(size, size);
+	MPlotSimpleImageData *data = new MPlotSimpleImageData(size, size);
 	data = model_->map()->data();
 
 	MPlotImageBasic* plot2d = new MPlotImageBasic(data);
@@ -349,10 +357,10 @@ void XPSDisplayWidget::displayMap()
 
 void XPSDisplayWidget::updateListFromBatch()
 {
-    qDebug() << numberOfScans_;
-    for(int i = 0; i < numberOfScans_; i++){
-        scanListWidget_->addItem(model_->scanName(i));
-    }
+	qDebug() << numberOfScans_;
+	for(int i = 0; i < numberOfScans_; i++){
+		scanListWidget_->addItem(model_->scanName(i));
+	}
 }
 
 void XPSDisplayWidget::updateList()
@@ -368,40 +376,40 @@ void XPSDisplayWidget::updateList()
 // ToDo: Remove ability to add scan until both params are approved
 void XPSDisplayWidget::checkParam()
 {
-    if(normalized){
+	if(normalized){
 
-        if(addPhotonEnergy_->text().toDouble() > 0)
-              paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/checkmark21.png").pixmap(20));
-        else
-              paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
+		if(addPhotonEnergy_->text().toDouble() > 0)
+			paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/checkmark21.png").pixmap(20));
+		else
+			paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
 
-        if(addI0_->text().toDouble())
-              paramStatusI0_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/checkmark21.png").pixmap(20));
-        else
-              paramStatusI0_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
-    }
-    else{
+		if(addI0_->text().toDouble())
+			paramStatusI0_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/checkmark21.png").pixmap(20));
+		else
+			paramStatusI0_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
+	}
+	else{
 
-        if(photonEnergyStep_->text().toDouble() > 0)
-              paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/checkmark21.png").pixmap(20));
-        else
-              paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
+		if(photonEnergyStep_->text().toDouble() > 0)
+			paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/checkmark21.png").pixmap(20));
+		else
+			paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
 
-    }
+	}
 }
 
 XPSDisplayWidget::~XPSDisplayWidget()
 {
-    if (addScanDialog_){
-        addScanDialog_->deleteLater();
-        addScanDialog_ = 0;
-    }
-    if (optionDialog_){
-	optionDialog_->deleteLater();
-	optionDialog_ = 0;
-    }
-    if (batchAddScanDialog_){
-        batchAddScanDialog_->deleteLater();
-        batchAddScanDialog_ = 0;
-    }
+	if (addScanDialog_){
+		addScanDialog_->deleteLater();
+		addScanDialog_ = 0;
+	}
+	if (optionDialog_){
+		optionDialog_->deleteLater();
+		optionDialog_ = 0;
+	}
+	if (batchAddScanDialog_){
+		batchAddScanDialog_->deleteLater();
+		batchAddScanDialog_ = 0;
+	}
 }

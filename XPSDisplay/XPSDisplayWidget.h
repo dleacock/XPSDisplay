@@ -23,24 +23,24 @@ class XPSDisplayWidget : public QWidget
 	Q_OBJECT
 public:
 	XPSDisplayWidget(QWidget *parent = 0);
-    ~XPSDisplayWidget();
+	~XPSDisplayWidget();
 
 signals:
 	void scanAdded();
-    void batchScansAdded();
+	void batchScansAdded();
 public slots:
-    void openFileDialogNormalize();
-    void openFileDialogBatch();
-    void findFile();
-    void findBatchFiles();
-    void addScan();
-    void addBatchScans();
-    void removeScan();
-    void displayMap();
-    void updateList();
-    void updateListFromBatch();
-    void checkParam();
-    void alertDialog();
+	void openFileDialogNormalize();
+	void openFileDialogBatch();
+	void findFile();
+	void findBatchFiles();
+	void addScan();
+	void addBatchScans();
+	void removeScan();
+	void displayMap();
+	void updateList();
+	void updateListFromBatch();
+	void checkParam();
+	void alertDialog();
 
 protected:
 	QHBoxLayout *mainLayout_;
@@ -81,21 +81,21 @@ protected:
 
 	// needs to include fields to input I0 and hv
 	QDialog *addScanDialog_;
-    // batch add dialog
-    QDialog *batchAddScanDialog_;
+	// batch add dialog
+	QDialog *batchAddScanDialog_;
 	// Photon energy
 	QLineEdit *addPhotonEnergy_;
 	// Incident photon amount
 	QLineEdit *addI0_;
 	// Find scan button to open QFileDialog
 	QPushButton *findScanButton_;
-    // Add all scans
-    QPushButton *addScansButton_;
+	// Add all scans
+	QPushButton *addScansButton_;
 	// The current selected file to be addeds path
 	QLineEdit *addFileName_;
 	// Add current scan
 	QPushButton *addScan_;
-    // Labels for i0 and hv
+	// Labels for i0 and hv
 	QLabel *i0Label_;
 	QLabel *hvLabel_;
 
@@ -103,13 +103,16 @@ protected:
 	QLabel *paramStatusI0_;
 	QLabel *paramStatusHV_;
 
-    //Widgets for non-normalized batch add scans dialog
-    QListWidget *listOfScans_;
+	//Widgets for non-normalized batch add scans dialog
+	QListWidget *listOfScans_;
 
-    QStringList *fileNames_;
+	QStringList *fileNames_;
 
-    // Enter photon energy step size
-    QLineEdit *photonEnergyStep_;
+	// Enter photon energy step size
+	QLineEdit *photonEnergyStep_;
+	// Initial photon energy
+	QLineEdit *photonEnergyStart_;
+	QLabel *photonEnergyStartLabel_;
 
 
 
@@ -119,7 +122,7 @@ protected:
 
 	int numberOfScans_;
 
-    bool normalized;
+	bool normalized;
 
 
 };
