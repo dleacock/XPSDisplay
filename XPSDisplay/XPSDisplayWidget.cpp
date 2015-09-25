@@ -11,7 +11,9 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 
 	addScanDialog_ = 0;
 	optionDialog_ = 0;
-	batchAddScanDialog_ = 0;
+    batchAddScanDialog_ = 0;
+    data2D_ = 0;
+    plot2D_ = 0;
 
 	normalized = false;
 
@@ -296,8 +298,9 @@ void XPSDisplayWidget::findBatchFiles()
 // ToDo: this function needs to take into account an incrimentally increase hv values
 void XPSDisplayWidget::addBatchScans()
 {
-	qreal hvStep_ = photonEnergyStep_->text().toDouble();
-	model_->loadScanFromFiles(hvStep_, *fileNames_);
+    qreal hvStep_ = photonEnergyStep_->text().toDouble();
+    qreal hvStart_ = photonEnergyStart_->text().toDouble();
+    model_->loadScanFromFiles(hvStart_, hvStep_, *fileNames_);
 	batchAddScanDialog_->close();
 	emit batchScansAdded();
 }
@@ -340,18 +343,33 @@ void XPSDisplayWidget::removeScan()
 void XPSDisplayWidget::displayMap()
 {
 	//Send the XPSMap to the MPlot stuff
+     qDebug() << "before !data2D ";
 	model_->loadScanIntoMap();
 
 	int size = model_->map()->dataSize();
+    /*
+    MPlotSimpleImageData *data = new MPlotSimpleImageData(size, size);
+    data = model_->map()->data();
 
-	MPlotSimpleImageData *data = new MPlotSimpleImageData(size, size);
-	data = model_->map()->data();
+    MPlotImageBasic* plot2d = new MPlotImageBasic(data);
+    plot2d->setColorMap(MPlotColorMap::Jet);
+    plot_->addItem(plot2d);
 
-	MPlotImageBasic* plot2d = new MPlotImageBasic(data);
-	plot2d->setColorMap(MPlotColorMap::Jet);
-	plot_->addItem(plot2d);
+    plotView_->setPlot(plot_);
+    */
 
-	plotView_->setPlot(plot_);
+    if(!data2D_){
+        data2D_ = new MPlotSimpleImageData(size, size);
+        data2D_ = model_->map()->data();
+
+        plot2D_ = new MPlotImageBasic(data2D_);
+        plot2D_->setColorMap(MPlotColorMap::Jet);
+        plot_->addItem(plot2D_);
+        qDebug() << "out";
+    }
+
+    plotView_->setPlot(plot_);
+
 
 }
 

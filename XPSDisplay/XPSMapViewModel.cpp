@@ -3,7 +3,7 @@
 
 XPSMapViewModel::XPSMapViewModel()
 {
-
+    map_ = 0;
 
 }
 
@@ -16,12 +16,15 @@ void XPSMapViewModel::loadScansFromFilesNormalize(qreal i0, qreal hv, QString fi
 	scans_.append(scan);
 }
 
-void XPSMapViewModel::loadScanFromFiles(qreal hv, QStringList files)
+void XPSMapViewModel::loadScanFromFiles(qreal hvStart,qreal hvStepSize, QStringList files)
 {
-	for(int i = 0; i < files.count(); i++)
+    qreal hv = hvStart;
+
+    for(int i = 0; i < files.count(); i++)
 	{
 		XPSScan *scan = new XPSScan(hv, files.at(i));
 		scans_.append(scan);
+        hv += hvStepSize;
 	}
 	qDebug() << "XPSMapViewModel:: scans_.count " << scans_.count();
 
@@ -30,8 +33,17 @@ void XPSMapViewModel::loadScanFromFiles(qreal hv, QStringList files)
 
 void XPSMapViewModel::loadScanIntoMap()
 {
-	map_ = new XPSMap(scans_);
-	map_->buildXPSMap();
+    qDebug() << "loadScanIntoMap() 0 ";
+    if(!map_){
+          qDebug() << "loadScanIntoMap() 1 ";
+        map_ = new XPSMap(scans_);
+          qDebug() << "loadScanIntoMap() 2 ";
+          qDebug() << "loadScanIntoMap() 3";
+           map_->buildXPSMap();
+          qDebug() << "loadScanIntoMap() 4";
+
+    }
+
 }
 
 QString XPSMapViewModel::scanName(int index)
