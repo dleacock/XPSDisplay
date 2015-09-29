@@ -346,7 +346,7 @@ void XPSDisplayWidget::displayMap()
      qDebug() << "before !data2D ";
 	model_->loadScanIntoMap();
 
-	int size = model_->map()->dataSize();
+
     /*
     MPlotSimpleImageData *data = new MPlotSimpleImageData(size, size);
     data = model_->map()->data();
@@ -357,9 +357,10 @@ void XPSDisplayWidget::displayMap()
 
     plotView_->setPlot(plot_);
     */
-
+    int size = model_->map()->scans().count();
+    int scansPerFile = model_->map()->scans().at(0)->numOfPoints();
     if(!data2D_){
-        data2D_ = new MPlotSimpleImageData(size, size);
+        data2D_ = new MPlotSimpleImageData(size, scansPerFile);
         data2D_ = model_->map()->data();
 
         plot2D_ = new MPlotImageBasic(data2D_);

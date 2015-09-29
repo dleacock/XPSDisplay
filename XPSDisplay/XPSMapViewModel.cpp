@@ -37,10 +37,10 @@ void XPSMapViewModel::loadScanIntoMap()
     if(!map_){
           qDebug() << "loadScanIntoMap() 1 ";
         map_ = new XPSMap(scans_);
-          qDebug() << "loadScanIntoMap() 2 ";
-          qDebug() << "loadScanIntoMap() 3";
-           map_->buildXPSMap();
-          qDebug() << "loadScanIntoMap() 4";
+        qDebug() << "loadScanIntoMap() 2 ";
+        qDebug() << "loadScanIntoMap() 3";
+        map_->buildXPSMap();
+        qDebug() << "loadScanIntoMap() 4";
 
     }
 
