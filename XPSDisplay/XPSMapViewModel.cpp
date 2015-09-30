@@ -26,22 +26,14 @@ void XPSMapViewModel::loadScanFromFiles(qreal hvStart,qreal hvStepSize, QStringL
 		scans_.append(scan);
         hv += hvStepSize;
 	}
-	qDebug() << "XPSMapViewModel:: scans_.count " << scans_.count();
 
 }
 
-
 void XPSMapViewModel::loadScanIntoMap()
 {
-    qDebug() << "loadScanIntoMap() 0 ";
     if(!map_){
-          qDebug() << "loadScanIntoMap() 1 ";
         map_ = new XPSMap(scans_);
-        qDebug() << "loadScanIntoMap() 2 ";
-        qDebug() << "loadScanIntoMap() 3";
         map_->buildXPSMap();
-        qDebug() << "loadScanIntoMap() 4";
-
     }
 
 }

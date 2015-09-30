@@ -2,34 +2,30 @@
 
 XPSMap::XPSMap(QList<XPSScan*> scans)
 {
-    qDebug() << "After call 0";
     dataSize_ = 0;
     data2D_= 0;
     scans_ = scans;
-     qDebug() << "After call 1";
+
+    //This determines the total count of all points from all scan files.
+    //Is used to determine the max length of temp vectors used for storing
+    //data from the scans.
     for(int i = 0; i < scans_.count(); i++){
-        qDebug() << "After call 2 ";
-        qDebug() << "Scan #" << i+1;
-        for(int j = 0; j < scans_.at(i)->numOfPoints(); j++)
-        {
-             qDebug() << "KE: " << scans_.at(i)->kineticEnergy(j);
+        for(int j = 0; j < scans_.at(i)->numOfPoints(); j++){
+               dataSize_ += scans_.at(i)->numOfPoints();
         }
-        qDebug() << "Number of points per scan file: " <<  scans_.at(i)->numOfPoints();
-        dataSize_ += scans_.at(i)->numOfPoints();
     }
-    // I believe each scan file has the same number of scans
-    int scansPerFile = scans_.at(0)->numOfPoints();
-    qDebug() << "dataSize_" << dataSize_;
-    qDebug() << "After call 3";
-     if(!data2D_){
-        // CRASHING HERE!
-        // SEGFAULT on qvector.h line 424
-        // qMemSet(p->array, 0, asize * sizeof(T))
-         // where T is real and asize = 500,000,000
-        data2D_ = new MPlotSimpleImageData(scans_.count(), scansPerFile);
-        qDebug() << "After call 4";
+
+    // I believe each scan file has the same number of scans.
+    // That was the case for this particular experiment where each scan file has 660 points collected
+    // However this may not be the general case.
+    pointsPerFile_ = scans_.at(0)->numOfPoints();
+
+    // Let the x-axis be KE, which is the dep. axis in the igor files. Ki to Kf is the same
+    // for each file, called pointsPerFile_.
+    // Y-axis will be photon energy, which increases with each scan file. The dimension of this will be the total number of scan files
+    if(!data2D_){
+        data2D_ = new MPlotSimpleImageData(pointsPerFile_, scans_.count());
      }
-      qDebug() << "After call 5";
 }
 
 // read through all XPSScans, store data in MPlotSimpleImageData's vectors
@@ -38,53 +34,35 @@ XPSMap::XPSMap(QList<XPSScan*> scans)
 // 3. pass temp vectors into MPlotSimpleImageData::setXValues setYValues
 void XPSMap::buildXPSMap()
 {
-    qDebug() << "buildXPSMap 1";
-    QVector<qreal> tempKineticValues = QVector<qreal>(dataSize_);
+    //The total number of kinetic energy values remains the same in every file, in this case its 660
+    QVector<qreal> tempKineticValues = QVector<qreal>(pointsPerFile_);
+    //The counts value will be the z in the 2d map. For every K value in every file there is a count value
     QVector<qreal> tempCountsValues = QVector<qreal>(dataSize_);
-    QVector<qreal> tempPhotonValues = QVector<qreal>(dataSize_);
-    qDebug() << data2D_->count();
-    qDebug() << "buildXPSMap 2";
-    //This value will run from 0 to dataSize_
-    int tempIndex = 0;
-    for(int i = 0; i < scans_.count(); i++){
-    for(int j = 0; j < scans_.at(i)->numOfPoints(); j++){
-        qDebug() << "buildXPSMap 3";
-        // kinetic and counts are index based as each measurement is different
-        // however photon energy changes per full scan
-        tempKineticValues[tempIndex] = scans_.at(i)->kineticEnergy(j);
-        tempCountsValues[tempIndex] = scans_.at(i)->detectionCount(j);
-        tempPhotonValues[tempIndex] = scans_.at(i)->photonEnergy();
-        qDebug() << "VALUES: ";
-        qDebug() << "KE @ " << i << scans_.at(i)->kineticEnergy(j);
-        qDebug() << "C @ " << i << scans_.at(i)->detectionCount(j);
-        qDebug() << "PE @ " << i << scans_.at(i)->photonEnergy();
-        qDebug() << "buildXPSMap 4";
-        // Setting the Z while in the loop instead of laying down as a vector when I'm done
-        // since I'm not sure at what index each scan starts and stops at.
-       // qreal test = tempCountsValues.at(tempIndex);
-        qDebug() << "loop i,j: " << i << "," << j;
-        //data2D_->setZ(tempKineticValues[tempIndex], tempPhotonValues[tempIndex], test);
-        qDebug() << "buildXPSMap 5";
-        tempIndex++;
+    //Photon values start at some initial hv and increase by some defined value. Each scan file has its own hv value
+    QVector<qreal> tempPhotonValues = QVector<qreal>(scans_.count());
 
-        }
-
+    //Since every file has the same range of Ki to Kf we will just use the first file to fill our vector
+    for(int i = 0; i < pointsPerFile_; i++){
+        tempKineticValues[i] = scans_.at(0)->kineticEnergy(i);
     }
-
-    qDebug() << "buildXPSMap 6";
-    // X-axis: Kinetic Energy
-    // Y-axis: Photon Energy
-    // Z-aixs: Counts
-    data2D_->setXValues(0, dataSize_-1, tempKineticValues.data());
-    data2D_->setYValues(0, dataSize_-1, tempPhotonValues.data());
-
+    // Grab each hv value from every single file
     for(int i = 0; i < scans_.count(); i++){
-        for(int j = 0; j <  scans_.count(); j++){
-            data2D_->setZ(i, j,  1);
+        tempPhotonValues[i] = scans_.at(i)->photonEnergy();
+    }
+    // Run through each scan file and grab all detection counts and store continously in vector
+    int countIndex = 0;
+    for(int i = 0; i < scans_.count(); i++){
+        for(int j = 0; j < scans_.at(i)->numOfPoints(); j++){
+            tempCountsValues[countIndex] = scans_.at(i)->detectionCount(j);
+            countIndex++;
         }
     }
-
-
-    //qDebug() << "buildXPSMap 7";
+    //Set all values down at once after vectors are filled.
+    data2D_->setXValues(0, pointsPerFile_ - 1, tempKineticValues.data());
+    data2D_->setYValues(0, scans_.count() - 1, tempPhotonValues.data());
+    data2D_->setZValues(0, pointsPerFile_ - 1, 0, scans_.count() - 1, tempCountsValues.data());
 
 }
+
+
+

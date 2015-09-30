@@ -282,17 +282,14 @@ void XPSDisplayWidget::findBatchFiles()
 	dialog.setDirectory("/home/david/Desktop/Au");
 	dialog.setFileMode(QFileDialog::ExistingFiles);
 	dialog.setNameFilter(tr("Text (*.txt)"));
-	if(dialog.exec())
-	{
+	if(dialog.exec()){
+
 		fileNames_ = new QStringList(dialog.selectedFiles());
 		listOfScans_->addItems(*fileNames_);
 		numberOfScans_ = fileNames_->count();
 
 		dialog.close();
-		//Need to load scans into a model first, or they wont be able to be displayed in primary widget
-		// setting hv to 1 for testing.
-
-	}
+    }
 }
 
 // ToDo: this function needs to take into account an incrimentally increase hv values
@@ -340,38 +337,31 @@ void XPSDisplayWidget::removeScan()
 
 }
 
+//Ask XPSMapViewModel to call loadScanIntoMap()
+//Function creates new XPSMap(scans_) then calls XPSMap::buildXPSMap
+//This fills in a MPlotSimpleImageData class which is given to
+//data2D_ via the model
 void XPSDisplayWidget::displayMap()
 {
-	//Send the XPSMap to the MPlot stuff
-     qDebug() << "before !data2D ";
-	model_->loadScanIntoMap();
+    model_->loadScanIntoMap();
 
-
-    /*
-    MPlotSimpleImageData *data = new MPlotSimpleImageData(size, size);
-    data = model_->map()->data();
-
-    MPlotImageBasic* plot2d = new MPlotImageBasic(data);
-    plot2d->setColorMap(MPlotColorMap::Jet);
-    plot_->addItem(plot2d);
-
-    plotView_->setPlot(plot_);
-    */
+    //Create parameters to construct a MPlotSimleImageData object
     int size = model_->map()->scans().count();
     int scansPerFile = model_->map()->scans().at(0)->numOfPoints();
+
     if(!data2D_){
+
         data2D_ = new MPlotSimpleImageData(size, scansPerFile);
+        //ToDo: Check if data() getter actually works
         data2D_ = model_->map()->data();
 
         plot2D_ = new MPlotImageBasic(data2D_);
         plot2D_->setColorMap(MPlotColorMap::Jet);
         plot_->addItem(plot2D_);
-        qDebug() << "out";
+
     }
 
     plotView_->setPlot(plot_);
-
-
 }
 
 void XPSDisplayWidget::updateListFromBatch()

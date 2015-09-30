@@ -27,6 +27,8 @@ private:
 
     // Each scan consists of a series of scans, this number is that total.
     int dataSize_;
+    // Number of points in a single scan
+    int pointsPerFile_;
 
 };
 
