@@ -17,69 +17,30 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 
 	normalized = false;
 
-	// ToDo: Add Mplot widgets and plots, create a test map
-	plotView_ = new MPlotWidget;
+    plotView_ = new MPlotWidget;
 	plotView_->enableAntiAliasing(true);
 
 	// Create plot and set up axes. These are all dummy values for testing
 	plot_ = new MPlot;
-	plot_->axisBottom()->setAxisNameFont(QFont("Helvetica", 6));
-	plot_->axisBottom()->setTickLabelFont(QFont("Helvetica", 6));
-	plot_->axisBottom()->setAxisName("x-axis");
+    plot_->axisBottom()->setAxisNameFont(QFont("Helvetica", 6));
+    plot_->axisBottom()->setTickLabelFont(QFont("Helvetica", 6));
+    plot_->axisBottom()->setAxisName("Kinetic Energy");
 	plot_->axisLeft()->setAxisNameFont(QFont("Helvetica", 6));
-	plot_->axisLeft()->setTickLabelFont(QFont("Helvetica", 6));
-	plot_->axisLeft()->setAxisName("y-axis");
+    plot_->axisLeft()->setTickLabelFont(QFont("Helvetica", 6));
+    plot_->axisLeft()->setAxisName("Photon Energy");
+    plot_->axisLeft()->showGrid(false);
+
 
 	// Set the margins for the plot. Test values
-	plot_->setMarginLeft(10);
+    plot_->setMarginLeft(10);
 	plot_->setMarginBottom(15);
-	plot_->setMarginRight(2);
+    plot_->setMarginRight(10);
 	plot_->setMarginTop(2);
-
-    // FILL 2D data here using test values
-    // This will be removed and replaced with data from XPSMap
-
-    /*
-    data2D_ = new MPlotSimpleImageData(1024, 1024);
-
-    QVector<qreal> tempValue = QVector<qreal>(1024);
-    for (int i = 0; i < 1024; i++)
-        tempValue[i] = i;
-    data2D_->setXValues(0, 1023, tempValue.data());
-    data2D_->setYValues(0, 1023, tempValue.data());
-    for(int yy=0; yy<1024; yy++) {
-             for(int xx=0; xx<1024; xx++) {
-                 qreal x = data2D_->x(xx);
-                 qreal y = data2D_->y(yy);
-                 qreal r2 = x*x + y*y;
-                 data2D_->setZ(xx, yy, r2);
-             }
-         }
-
-    MPlotImageBasic* plot2d = new MPlotImageBasic(data2D_);
-    plot2d->setColorMap(MPlotColorMap::Jet);
-    plot_->addItem(plot2d);
-    */
-
-	// Enable autoscaling of both axes.
-	plot_->axisScaleLeft()->setAutoScaleEnabled();
-	plot_->axisScaleBottom()->setAutoScaleEnabled();
-
 
 	// Enable some convenient zoom tools.
 	plotView_->setPlot(plot_);
-	plotView_->setMinimumHeight(450);
-	plotView_->setMinimumWidth(600);
-
-
-	// Set the number of ticks.  A balance between readability and being practical.
-	plot_->axisBottom()->setTicks(3);
-	plot_->axisTop()->setTicks(0);
-	plot_->axisLeft()->setTicks(4);
-	plot_->axisRight()->setTicks(0);
-
-	// Set the autoscale constraints.
-	plot_->axisScaleLeft()->setDataRangeConstraint(MPlotAxisRange(0, MPLOT_POS_INFINITY));
+    plotView_->setMinimumHeight(650);
+    plotView_->setMinimumWidth(800);
 
 	scanListWidget_ = new QListWidget(this);
 	addScanButton_ = new QPushButton("Add Scan", this);
@@ -119,25 +80,29 @@ void XPSDisplayWidget::alertDialog()
 {
     if(!optionDialog_){
         optionDialog_ = new QDialog(this);
-        optionDialog_->setFixedSize(320, 100);
+        optionDialog_->setFixedSize(320, 140);
 
-        normalButton_ = new QPushButton("normal");
-	batchButton_ = new QPushButton("batch");
-	infoText_ = new QLabel("This is a description of what I'm saying.");
+        // Experimenting with different fonts and sizes. For final build I'd like to use a stylesheet
+        normalButton_ = new QPushButton("Single File");
+        normalButton_->setFont(QFont("Helvetica", 12));
+        batchButton_ = new QPushButton("Add Multiple Files");
+        batchButton_->setFont(QFont("Monospace", 12));
+        infoText_ = new QLabel("Select multiple files to add without normalization or individual files with normalization.");
+        infoText_->setWordWrap(true);
 
-	QVBoxLayout *mainLayout = new QVBoxLayout;
-	QHBoxLayout *subLayout = new QHBoxLayout;
+        QVBoxLayout *mainLayout = new QVBoxLayout;
+        QHBoxLayout *subLayout = new QHBoxLayout;
 
-	subLayout->addWidget(normalButton_);
-	subLayout->addWidget(batchButton_);
+        subLayout->addWidget(normalButton_);
+        subLayout->addWidget(batchButton_);
 
-	mainLayout->addWidget(infoText_);
-	mainLayout->addLayout(subLayout);
+        mainLayout->addWidget(infoText_);
+        mainLayout->addLayout(subLayout);
 
-	optionDialog_->setLayout(mainLayout);
+        optionDialog_->setLayout(mainLayout);
 
-	connect(normalButton_, SIGNAL(clicked()), this, SLOT(openFileDialogNormalize()));
-	connect(batchButton_, SIGNAL(clicked()), this, SLOT(openFileDialogBatch()));
+        connect(normalButton_, SIGNAL(clicked()), this, SLOT(openFileDialogNormalize()));
+        connect(batchButton_, SIGNAL(clicked()), this, SLOT(openFileDialogBatch()));
 
     }
 	optionDialog_->exec();
@@ -152,35 +117,35 @@ void XPSDisplayWidget::openFileDialogBatch()
     if(!batchAddScanDialog_){
 
         batchAddScanDialog_ = new QDialog(this);
-        batchAddScanDialog_->setFixedSize(380, 120);
+        batchAddScanDialog_->setFixedSize(600, 320);
 
-        hvLabel_ = new QLabel("hv step: ");
-        hvLabel_->setFixedWidth(20);
+        photonEnergyStartLabel_ = new QLabel("hv initial: ");
+        photonEnergyStartLabel_->setFixedWidth(70);
+        photonEnergyStart_ = new QLineEdit("0");
+        photonEnergyStart_->setFixedWidth(75);
+
+        hvLabel_ = new QLabel("step size: ");
+        hvLabel_->setFixedWidth(70);
         photonEnergyStep_ = new QLineEdit("0");
         photonEnergyStep_->setFixedWidth(75);
-
-	photonEnergyStartLabel_ = new QLabel("hv initial: ");
-	photonEnergyStartLabel_->setFixedWidth(35);
-	photonEnergyStart_ = new QLineEdit("0");
-	photonEnergyStart_->setFixedWidth(75);
 
         paramStatusHV_ = new QLabel();
         paramStatusHV_->setPixmap(QIcon("/home/david/code/XPSDisplay/XPSDisplay/cross-mark1.png").pixmap(20));
 
-        findScanButton_ = new QPushButton("Find Scan");
+        findScanButton_ = new QPushButton("Find Scans");
         addFileName_ = new QLineEdit("File Selected");
-        addScansButton_ = new QPushButton("Add this scan");
+        addScansButton_ = new QPushButton("Add Scans");
 
         listOfScans_ = new QListWidget;
-        //fileNames_ = new QStringList;
+
         QHBoxLayout *mainLayout = new QHBoxLayout;
         QHBoxLayout *hvLayout = new QHBoxLayout;
         QVBoxLayout *panelLayout = new QVBoxLayout;
 
+        hvLayout->addWidget(photonEnergyStartLabel_);
+        hvLayout->addWidget(photonEnergyStart_);
         hvLayout->addWidget(hvLabel_);
         hvLayout->addWidget(photonEnergyStep_);
-	hvLayout->addWidget(photonEnergyStartLabel_);
-	hvLayout->addWidget(photonEnergyStart_);
         hvLayout->addWidget(paramStatusHV_);
 
         panelLayout->addLayout(hvLayout);
@@ -284,9 +249,9 @@ void XPSDisplayWidget::findBatchFiles()
 	dialog.setNameFilter(tr("Text (*.txt)"));
 	if(dialog.exec()){
 
-		fileNames_ = new QStringList(dialog.selectedFiles());
-		listOfScans_->addItems(*fileNames_);
-		numberOfScans_ = fileNames_->count();
+        fileNames = QStringList(dialog.selectedFiles());
+        listOfScans_->addItems(fileNames);
+        numberOfScans_ = fileNames.count();
 
 		dialog.close();
     }
@@ -295,9 +260,9 @@ void XPSDisplayWidget::findBatchFiles()
 // ToDo: this function needs to take into account an incrimentally increase hv values
 void XPSDisplayWidget::addBatchScans()
 {
-    qreal hvStep_ = photonEnergyStep_->text().toDouble();
-    qreal hvStart_ = photonEnergyStart_->text().toDouble();
-    model_->loadScanFromFiles(hvStart_, hvStep_, *fileNames_);
+    qreal hvStep = photonEnergyStep_->text().toDouble();
+    qreal hvStart = photonEnergyStart_->text().toDouble();
+    model_->loadScanFromFiles(hvStart, hvStep, fileNames);
 	batchAddScanDialog_->close();
 	emit batchScansAdded();
 }
@@ -314,10 +279,10 @@ void XPSDisplayWidget::findFile(){
 
 void XPSDisplayWidget::addScan()
 {
-	qreal hv_ = addPhotonEnergy_->text().toDouble();
-	qreal i0_ = addI0_->text().toDouble();
+    qreal hv = addPhotonEnergy_->text().toDouble();
+    qreal i0 = addI0_->text().toDouble();
 
-	model_->loadScansFromFilesNormalize(i0_, hv_, fileName_);
+    model_->loadScansFromFilesNormalize(i0, hv, fileName_);
 
 	//update the list of files
 	numberOfScans_++;
@@ -352,12 +317,14 @@ void XPSDisplayWidget::displayMap()
     if(!data2D_){
 
         data2D_ = new MPlotSimpleImageData(size, scansPerFile);
-        //ToDo: Check if data() getter actually works
         data2D_ = model_->map()->data();
 
         plot2D_ = new MPlotImageBasic(data2D_);
         plot2D_->setColorMap(MPlotColorMap::Jet);
+
         plot_->addItem(plot2D_);
+        plot_->axisLeft()->showGrid(false);
+        plot_->colorLegend()->show();
 
     }
 

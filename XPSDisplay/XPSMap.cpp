@@ -6,19 +6,8 @@ XPSMap::XPSMap(QList<XPSScan*> scans)
     data2D_= 0;
     scans_ = scans;
 
-    //This determines the total count of all points from all scan files.
-    //Is used to determine the max length of temp vectors used for storing
-    //data from the scans.
-    for(int i = 0; i < scans_.count(); i++){
-        for(int j = 0; j < scans_.at(i)->numOfPoints(); j++){
-               dataSize_ += scans_.at(i)->numOfPoints();
-        }
-    }
-
-    // I believe each scan file has the same number of scans.
-    // That was the case for this particular experiment where each scan file has 660 points collected
-    // However this may not be the general case.
     pointsPerFile_ = scans_.at(0)->numOfPoints();
+    dataSize_ = pointsPerFile_ * scans_.count();
 
     // Let the x-axis be KE, which is the dep. axis in the igor files. Ki to Kf is the same
     // for each file, called pointsPerFile_.
@@ -44,23 +33,29 @@ void XPSMap::buildXPSMap()
     //Since every file has the same range of Ki to Kf we will just use the first file to fill our vector
     for(int i = 0; i < pointsPerFile_; i++){
         tempKineticValues[i] = scans_.at(0)->kineticEnergy(i);
+        qDebug() << "KE " << i << ": " << tempKineticValues[i];
     }
     // Grab each hv value from every single file
     for(int i = 0; i < scans_.count(); i++){
         tempPhotonValues[i] = scans_.at(i)->photonEnergy();
+        qDebug() << "HV " << i << ": " << tempPhotonValues[i];
     }
-    // Run through each scan file and grab all detection counts and store continously in vector
-    int countIndex = 0;
-    for(int i = 0; i < scans_.count(); i++){
-        for(int j = 0; j < scans_.at(i)->numOfPoints(); j++){
-            tempCountsValues[countIndex] = scans_.at(i)->detectionCount(j);
-            countIndex++;
+
+    int keSize = pointsPerFile_;
+    int hvSize = scans_.count();
+
+    for (int i = 0; i < hvSize; i++){
+        double i0 = scans_.at(i)->incomingPhotons();
+        for (int j = 0; j < keSize; j++){
+
+            tempCountsValues[i+j*hvSize] = scans_.at(i)->detectionCount(j)/i0;
         }
     }
+
     //Set all values down at once after vectors are filled.
     data2D_->setXValues(0, pointsPerFile_ - 1, tempKineticValues.data());
     data2D_->setYValues(0, scans_.count() - 1, tempPhotonValues.data());
-    data2D_->setZValues(0, pointsPerFile_ - 1, 0, scans_.count() - 1, tempCountsValues.data());
+    data2D_->setZValues(0, 0, pointsPerFile_ - 1, scans_.count() - 1, tempCountsValues.data());
 
 }
 

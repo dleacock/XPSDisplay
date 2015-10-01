@@ -35,6 +35,18 @@ void XPSScan::loadFromFile(QString filePath){
     while(!inputFile.atEnd()){
 
         QString line = inputFile.readLine();
+        if(line.contains("hv")){
+            QStringList tempHV = line.split("=");
+            qDebug() << "tempHV: " << tempHV;
+            photonEnergy_ = tempHV.at(1).toDouble();
+            qDebug() << "photonEnergy_: " << photonEnergy_;
+        }
+        if(line.contains("i0")){
+            QStringList tempI0 = line.split("=");
+            qDebug() << "tempI0: " << tempI0;
+            incomingPhotons_ = tempI0.at(1).toDouble();
+            qDebug() << "i0: " << incomingPhotons_;
+        }
         if(line == ("[Data 1]")){
 
              while(!inputFile.atEnd()){

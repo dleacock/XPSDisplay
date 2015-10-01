@@ -106,7 +106,7 @@ protected:
 	//Widgets for non-normalized batch add scans dialog
 	QListWidget *listOfScans_;
 
-	QStringList *fileNames_;
+    QStringList fileNames;
 
 	// Enter photon energy step size
 	QLineEdit *photonEnergyStep_;

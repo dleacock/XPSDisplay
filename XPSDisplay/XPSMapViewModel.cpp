@@ -24,6 +24,7 @@ void XPSMapViewModel::loadScanFromFiles(qreal hvStart,qreal hvStepSize, QStringL
 	{
 		XPSScan *scan = new XPSScan(hv, files.at(i));
 		scans_.append(scan);
+        //ToDo: This doesnt work, gives the wrong values
         hv += hvStepSize;
 	}
 
