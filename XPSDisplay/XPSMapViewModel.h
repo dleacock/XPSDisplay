@@ -35,6 +35,8 @@ public:
     void loadScansFromFilesNormalize(qreal i0, qreal hv, QString fileName);
     // use this when given a batch of files with no normalization
     void loadScanFromFiles(qreal hvStart, qreal hvStepSize, QStringList fileNames);
+    // use when i0 and hv have been written into the igor files and be batch added
+    void loadScanFromFiles(QStringList fileNames);
     // function will be iterated over all scans, it loads each scan into XPSMap class to build map
     void loadScanIntoMap();
     // remove a scan from the list as requested by the widget

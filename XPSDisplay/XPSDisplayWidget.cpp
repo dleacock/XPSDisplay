@@ -46,6 +46,8 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 	addScanButton_ = new QPushButton("Add Scan", this);
 	removeScanButton_ = new QPushButton("Remove Scan", this);
 	createMapButton_ = new QPushButton("Create Map", this);
+    createMapButton_->setIcon(QIcon("/home/david/code/XPSDisplay/XPSDisplay/start4.png"));
+    createMapButton_->setIconSize(QSize(25,25));
 
 	mainLayout_ = new QHBoxLayout;
 	buttonsLayout_ = new QHBoxLayout;
@@ -260,10 +262,11 @@ void XPSDisplayWidget::findBatchFiles()
 // ToDo: this function needs to take into account an incrimentally increase hv values
 void XPSDisplayWidget::addBatchScans()
 {
-    qreal hvStep = photonEnergyStep_->text().toDouble();
-    qreal hvStart = photonEnergyStart_->text().toDouble();
-    model_->loadScanFromFiles(hvStart, hvStep, fileNames);
-	batchAddScanDialog_->close();
+   // qreal hvStep = photonEnergyStep_->text().toDouble();
+   // qreal hvStart = photonEnergyStart_->text().toDouble();
+   // model_->loadScanFromFiles(hvStart, hvStep, fileNames);
+    model_->loadScanFromFiles(fileNames);
+    batchAddScanDialog_->close();
 	emit batchScansAdded();
 }
 
@@ -333,8 +336,7 @@ void XPSDisplayWidget::displayMap()
 
 void XPSDisplayWidget::updateListFromBatch()
 {
-	qDebug() << numberOfScans_;
-	for(int i = 0; i < numberOfScans_; i++){
+    for(int i = 0; i < numberOfScans_; i++){
 		scanListWidget_->addItem(model_->scanName(i));
 	}
 }

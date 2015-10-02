@@ -18,6 +18,8 @@ public:
     XPSScan(qreal i0, qreal hv, QString filePath);
     // Not normalized, used in batch files selected
     XPSScan(qreal hv, QString filePath);
+    // This will most likely be the final version where the hv and i0 values have been written into the igor file itself
+    XPSScan(QString filePath);
 
     // Loads IGOR text file and populates member variables. It finds the beginning of the data and fills the kineticEnergy and detectionCounts list.
     // ToDo: This algorithm needs to be fixed. At the end of every IGOR file, after the data is done, there is a blank space. This function needs

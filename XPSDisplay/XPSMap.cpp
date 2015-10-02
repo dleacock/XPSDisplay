@@ -33,22 +33,18 @@ void XPSMap::buildXPSMap()
     //Since every file has the same range of Ki to Kf we will just use the first file to fill our vector
     for(int i = 0; i < pointsPerFile_; i++){
         tempKineticValues[i] = scans_.at(0)->kineticEnergy(i);
-        qDebug() << "KE " << i << ": " << tempKineticValues[i];
     }
     // Grab each hv value from every single file
     for(int i = 0; i < scans_.count(); i++){
         tempPhotonValues[i] = scans_.at(i)->photonEnergy();
-        qDebug() << "HV " << i << ": " << tempPhotonValues[i];
     }
 
     int keSize = pointsPerFile_;
     int hvSize = scans_.count();
 
     for (int i = 0; i < hvSize; i++){
-        double i0 = scans_.at(i)->incomingPhotons();
         for (int j = 0; j < keSize; j++){
-
-            tempCountsValues[i+j*hvSize] = scans_.at(i)->detectionCount(j)/i0;
+             tempCountsValues[i+j*hvSize] = scans_.at(i)->detectionCount(j);
         }
     }
 

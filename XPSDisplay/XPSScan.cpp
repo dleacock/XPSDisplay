@@ -23,6 +23,13 @@ XPSScan::XPSScan(qreal hv, QString filePath)
 
 
 }
+// i0 and hv are grabbed from the igor file itself
+XPSScan::XPSScan(QString filePath)
+{
+    filePath_ = filePath;
+    loadFromFile(filePath);
+
+}
 
 // Relevent data in IGOR file doesn't start until the head [Data 1] is displayed, the position of the header plus 14 spaces is where data starts.
 // Its presented as kinetic energy followed by a single space then the counts.
@@ -37,15 +44,11 @@ void XPSScan::loadFromFile(QString filePath){
         QString line = inputFile.readLine();
         if(line.contains("hv")){
             QStringList tempHV = line.split("=");
-            qDebug() << "tempHV: " << tempHV;
             photonEnergy_ = tempHV.at(1).toDouble();
-            qDebug() << "photonEnergy_: " << photonEnergy_;
         }
         if(line.contains("i0")){
             QStringList tempI0 = line.split("=");
-            qDebug() << "tempI0: " << tempI0;
             incomingPhotons_ = tempI0.at(1).toDouble();
-            qDebug() << "i0: " << incomingPhotons_;
         }
         if(line == ("[Data 1]")){
 
