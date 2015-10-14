@@ -141,6 +141,7 @@ void XPSDisplayWidget::addBatchScans()
 //data2D_ via the model
 void XPSDisplayWidget::displayMap()
 {
+
     model_->loadScanIntoMap();
 
     //Create parameters to construct a MPlotSimleImageData object
@@ -152,9 +153,10 @@ void XPSDisplayWidget::displayMap()
         data2D_ = new MPlotSimpleImageData(size, scansPerFile);
         data2D_ = model_->map()->data();
 
-        plot2D_ = new MPlotImageBasic(data2D_);
-        plot2D_->setColorMap(MPlotColorMap::Jet);
-
+        if(!plot2D_){
+            plot2D_ = new MPlotImageBasic(data2D_);
+            plot2D_->setColorMap(MPlotColorMap::Jet);
+        }
         plot_->addItem(plot2D_);
         plot_->axisLeft()->showGrid(false);
         plot_->colorLegend()->show();
@@ -174,8 +176,15 @@ void XPSDisplayWidget::updateListFromBatch()
 
 void XPSDisplayWidget::clearListAndMap()
 {
+    //This might be overkill but it works
     scanListWidget_->clear();
-    //ToDo: clear plot
+    listOfScans_->clear();
+    model_->removeAllScans();
+    plot_->removeItem(plot2D_);
+    numberOfScans_ = 0;
+    data2D_ = 0;
+    plot2D_ = 0;
+
 }
 
 

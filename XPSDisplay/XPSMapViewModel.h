@@ -41,6 +41,8 @@ public:
     void loadScanIntoMap();
     // remove a scan from the list as requested by the widget
     void removeScan();
+    // remove all scans
+    void removeAllScans();
 
 
 private:

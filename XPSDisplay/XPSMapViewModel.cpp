@@ -56,3 +56,9 @@ void XPSMapViewModel::removeScan()
 {
 	scans_.removeLast();
 }
+
+void XPSMapViewModel::removeAllScans()
+{
+    scans_.clear();
+    map_ = 0;
+}

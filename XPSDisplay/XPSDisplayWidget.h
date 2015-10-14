@@ -80,7 +80,7 @@ protected:
 
 	//Widgets for non-normalized batch add scans dialog
 	QListWidget *listOfScans_;
-
+    // List of all the igor files added
     QStringList fileNames;
 
 
