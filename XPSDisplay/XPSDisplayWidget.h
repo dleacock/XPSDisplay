@@ -29,18 +29,14 @@ signals:
 	void scanAdded();
 	void batchScansAdded();
 public slots:
-	void openFileDialogNormalize();
+
 	void openFileDialogBatch();
-	void findFile();
 	void findBatchFiles();
-	void addScan();
-	void addBatchScans();
-	void removeScan();
-	void displayMap();
-	void updateList();
-	void updateListFromBatch();
-	void checkParam();
-	void alertDialog();
+    void addBatchScans();
+    void displayMap();
+    void updateListFromBatch();
+    void clearListAndMap();
+
 
 protected:
 	QHBoxLayout *mainLayout_;
@@ -50,10 +46,10 @@ protected:
 
 	// List of current 1D XPS Scans to be added to map
 	QListWidget *scanListWidget_;
-	// Add new XPS Scan
-	QPushButton *addScanButton_;
-	// Remove recently added scan
-	QPushButton *removeScanButton_;
+    // Add new XPS Scans
+    QPushButton *addScansButton_;
+    // Clear list of scans and map
+    QPushButton *clearScansButton_;
 	// Create map based off XPS scans in list widget
 	QPushButton *createMapButton_;
 
@@ -70,59 +66,27 @@ protected:
 	// Image to be given to plot
 	MPlotImageBasic *plot2D_;
 
-	// Let user select which option they want. There might be a better way to prompt them that doesn't require a new dialog
-	QDialog *optionDialog_;
-	// Select normalized
-	QPushButton *normalButton_;
-	// Select not normalized and do a batch add
-	QPushButton *batchButton_;
-	// A description of the options
-	QLabel *infoText_;
-
-	// needs to include fields to input I0 and hv
-	QDialog *addScanDialog_;
-	// batch add dialog
+    // batch add dialog
 	QDialog *batchAddScanDialog_;
-	// Photon energy
-	QLineEdit *addPhotonEnergy_;
-	// Incident photon amount
-	QLineEdit *addI0_;
-	// Find scan button to open QFileDialog
+    // Find scan button to open QFileDialog
 	QPushButton *findScanButton_;
 	// Add all scans
-	QPushButton *addScansButton_;
+    QPushButton *addSelectedScansButton_;
 	// The current selected file to be addeds path
 	QLineEdit *addFileName_;
 	// Add current scan
 	QPushButton *addScan_;
-	// Labels for i0 and hv
-	QLabel *i0Label_;
-	QLabel *hvLabel_;
 
-	// Icon to show if params are acceptable
-	QLabel *paramStatusI0_;
-	QLabel *paramStatusHV_;
 
 	//Widgets for non-normalized batch add scans dialog
 	QListWidget *listOfScans_;
 
     QStringList fileNames;
 
-	// Enter photon energy step size
-	QLineEdit *photonEnergyStep_;
-	// Initial photon energy
-	QLineEdit *photonEnergyStart_;
-	QLabel *photonEnergyStartLabel_;
-
-
-
-	QString fileName_;
 
 	XPSMapViewModel *model_;
 
 	int numberOfScans_;
-
-	bool normalized;
 
 
 };
