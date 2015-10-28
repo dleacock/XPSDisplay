@@ -9,6 +9,7 @@
 #include <QDialog>
 #include <QLineEdit>
 #include <QTextEdit>
+#include <QSlider>
 
 #include "MPlot/MPlotWidget.h"
 #include "MPlot/MPlot.h"
@@ -37,12 +38,22 @@ public slots:
     void updateListFromBatch();
     void clearListAndMap();
 
+    void updateBrightness(int newValue);
+    void updateContrast(int newValue);
+    void updateGamma(int newValue);
+
 
 protected:
 	QHBoxLayout *mainLayout_;
 	QHBoxLayout *buttonsLayout_;
 	QVBoxLayout *panelLayout_;
 	QVBoxLayout *mapLayout_;
+    QHBoxLayout *controlsLayout_;
+    QVBoxLayout *controlsHolder_;
+    QHBoxLayout *contrastLayout_;
+    QHBoxLayout *brightnessLayout_;
+    QHBoxLayout *gammaLayout_;
+
 
 	// List of current 1D XPS Scans to be added to map
 	QListWidget *scanListWidget_;
@@ -53,9 +64,14 @@ protected:
 	// Create map based off XPS scans in list widget
 	QPushButton *createMapButton_;
 
-
-	// Testing purposes, dummy image for map
-	QLabel *imageLabel_;
+    // Color controls for plot2D map
+    // Default values from MPlotColorMap are brightness = 0., contrast and gamma = 1.
+    QLabel *contrastLabel_;
+    QLabel *brightnessLabel_;
+    QLabel *gammaLabel_;
+    QSlider *contrastSlider_;
+    QSlider *brightnessSlider_;
+    QSlider *gammaSlider_;
 
 	// MPlot widget that holds plot
 	MPlotWidget *plotView_;

@@ -15,7 +15,7 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
     plot2D_ = 0;
 
     plotView_ = new MPlotWidget;
-	plotView_->enableAntiAliasing(true);
+    plotView_->enableAntiAliasing(true);
 
 	// Create plot and set up axes. These are all dummy values for testing
 	plot_ = new MPlot;
@@ -49,12 +49,54 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
     createMapButton_->setIcon(QIcon("/home/david/code/XPSDisplay/XPSDisplay/start4.png"));
     createMapButton_->setIconSize(QSize(25,25));
 
+    contrastLabel_ = new QLabel("Contrast:");
+    brightnessLabel_ = new QLabel("Brightness:");
+    gammaLabel_ = new QLabel("Gamma:");
+
+    contrastSlider_ = new QSlider(Qt::Horizontal, this);
+    contrastSlider_->setRange(-10, 10);
+    contrastSlider_->setTickInterval(1);
+    contrastSlider_->setValue(1);
+
+    brightnessSlider_ = new QSlider(Qt::Horizontal, this);
+    brightnessSlider_->setRange(-10, 10);
+    brightnessSlider_->setTickInterval(1);
+    brightnessSlider_->setValue(0);
+
+    gammaSlider_ = new QSlider(Qt::Horizontal, this);
+    gammaSlider_->setRange(-10, 10);
+    gammaSlider_->setTickInterval(1);
+    gammaSlider_->setValue(1);
+
 	mainLayout_ = new QHBoxLayout;
 	buttonsLayout_ = new QHBoxLayout;
 	panelLayout_ = new QVBoxLayout;
 	mapLayout_ = new QVBoxLayout;
 
+    contrastLayout_ = new QHBoxLayout;
+    brightnessLayout_ = new QHBoxLayout;
+    gammaLayout_ = new QHBoxLayout;
+
+    controlsHolder_ = new QVBoxLayout;
+    controlsLayout_ = new QHBoxLayout;
+
+    contrastLayout_->addWidget(contrastLabel_);
+    contrastLayout_->addWidget(contrastSlider_);
+    controlsHolder_->addLayout(contrastLayout_);
+
+    brightnessLayout_->addWidget(brightnessLabel_);
+    brightnessLayout_->addWidget(brightnessSlider_);
+    controlsHolder_->addLayout(brightnessLayout_);
+
+    gammaLayout_->addWidget(gammaLabel_);
+    gammaLayout_->addWidget(gammaSlider_);
+    controlsHolder_->addLayout(gammaLayout_);
+
+    controlsLayout_->addLayout(controlsHolder_);
+    controlsLayout_->insertStretch(-1);
+
 	mapLayout_->addWidget(plotView_);
+    mapLayout_->addLayout(controlsLayout_);
 
     buttonsLayout_->addWidget(addScansButton_);
     buttonsLayout_->addWidget(clearScansButton_);
@@ -72,6 +114,11 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
     connect(this, SIGNAL(batchScansAdded()), this, SLOT(updateListFromBatch()));
     connect(createMapButton_, SIGNAL(clicked()), this, SLOT(displayMap()));
     connect(clearScansButton_, SIGNAL(clicked()), this, SLOT(clearListAndMap()));
+
+    connect(contrastSlider_, SIGNAL(sliderMoved(int)), this, SLOT(updateContrast(int)));
+    connect(brightnessSlider_, SIGNAL(sliderMoved(int)), this, SLOT(updateBrightness(int)));
+    connect(gammaSlider_, SIGNAL(sliderMoved(int)), this, SLOT(updateGamma(int)));
+
 
 }
 
@@ -156,6 +203,9 @@ void XPSDisplayWidget::displayMap()
         if(!plot2D_){
             plot2D_ = new MPlotImageBasic(data2D_);
             plot2D_->setColorMap(MPlotColorMap::Jet);
+            //Setting it to 10 for testing, to see if the value carries on to the qdebug in updateConstrast
+            plot2D_->colorMap().setContrast(10);
+
         }
         plot_->addItem(plot2D_);
         plot_->axisLeft()->showGrid(false);
@@ -173,6 +223,34 @@ void XPSDisplayWidget::updateListFromBatch()
 		scanListWidget_->addItem(model_->scanName(i));
 	}
 }
+
+void XPSDisplayWidget::updateContrast(int newValue)
+{
+    qDebug() << "slider value: " << contrastSlider_->value();
+    qDebug() << "contrast old: " << plot2D_->colorMap().contrast();
+    //Testing to see if the contrast slider should be be a scaling value or just a new value
+    qreal value = newValue * plot2D_->colorMap().contrast();
+    qDebug() << "value: " << value;
+    plot2D_->colorMap().setContrast(value);
+    plot2D_->update();
+    qDebug() << "contrast new: " << plot2D_->colorMap().contrast();
+
+
+}
+void XPSDisplayWidget::updateBrightness(int newValue)
+{
+     plot2D_->colorMap().setBrightness(newValue);
+     plot2D_->update();
+}
+void XPSDisplayWidget::updateGamma(int newValue)
+{
+     plot2D_->colorMap().setGamma(newValue);
+     plot2D_->update();
+
+}
+
+
+
 
 void XPSDisplayWidget::clearListAndMap()
 {
