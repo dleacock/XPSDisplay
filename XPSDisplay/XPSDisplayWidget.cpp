@@ -202,9 +202,6 @@ void XPSDisplayWidget::displayMap()
 
         if(!plot2D_){
             plot2D_ = new MPlotImageBasic(data2D_);
-            plot2D_->setColorMap(MPlotColorMap::Jet);
-            //Setting it to 10 for testing, to see if the value carries on to the qdebug in updateConstrast
-            plot2D_->colorMap().setContrast(10);
 
         }
         plot_->addItem(plot2D_);
@@ -226,26 +223,30 @@ void XPSDisplayWidget::updateListFromBatch()
 
 void XPSDisplayWidget::updateContrast(int newValue)
 {
-    qDebug() << "slider value: " << contrastSlider_->value();
-    qDebug() << "contrast old: " << plot2D_->colorMap().contrast();
-    //Testing to see if the contrast slider should be be a scaling value or just a new value
-    qreal value = newValue * plot2D_->colorMap().contrast();
-    qDebug() << "value: " << value;
-    plot2D_->colorMap().setContrast(value);
+    qDebug() << "slider value: " << newValue;
+    qDebug() << "i: plot2D_->colorMap().contrast(): " << plot2D_->colorMap().contrast();
+
+    plot2D_->colorMap().setContrast(newValue);
     plot2D_->update();
-    qDebug() << "contrast new: " << plot2D_->colorMap().contrast();
+
+    qDebug() << "f: plot2D_->colorMap().contrast(): " << plot2D_->colorMap().contrast();
 
 
 }
 void XPSDisplayWidget::updateBrightness(int newValue)
 {
-     plot2D_->colorMap().setBrightness(newValue);
-     plot2D_->update();
+    qDebug() << "i: plot2D_->colorMap().brightness(): " << plot2D_->colorMap().brightness();
+    qreal value = 0.1 * newValue;
+    plot2D_->colorMap().setBrightness(value);
+    plot2D_->update();
+    qDebug() << "f: plot2D_->colorMap().brightness(): " << plot2D_->colorMap().brightness();
+
 }
 void XPSDisplayWidget::updateGamma(int newValue)
 {
-     plot2D_->colorMap().setGamma(newValue);
-     plot2D_->update();
+
+    plot2D_->colorMap().setGamma(newValue);
+    plot2D_->update();
 
 }
 

@@ -59,8 +59,7 @@ void XPSMapViewModel::removeScan()
 
 void XPSMapViewModel::removeAllScans()
 {
-    for(int i = 0; i < scans_.size(); i++)
-    {
+    for(int i = 0; i < scans_.size(); i++){
         delete scans_.at(i);
         }
     scans_.clear();
