@@ -480,26 +480,23 @@ bool MPlotColorMap::rgbValues(const QVector<int> &values, QRgb *output)
 
 void MPlotColorMap::setBrightness(qreal brightness)
 {
-    //d.detach();
+    d.detach();
 	d->brightness_ = brightness;
 	d->mustApplyBCG_ = !(d->brightness_ == 0.0 && d->contrast_ == 1.0 && d->gamma_ == 1.0);
-    qDebug() << "MPlotColorMap::setBrightness d->brightness_: " << d->brightness_;
-
 
 }
 
 void MPlotColorMap::setContrast(qreal contrast)
 {
-    //d.detach();
+    d.detach();
 	d->contrast_ = contrast;
 	d->mustApplyBCG_ = !(d->brightness_ == 0.0 && d->contrast_ == 1.0 && d->gamma_ == 1.0);
-    qDebug() << "MPlotColorMap::setContrast d->contrast_: " << d->contrast_;
 
 }
 
 void MPlotColorMap::setGamma(qreal gamma)
 {
-	d.detach();
+    d.detach();
 	d->gamma_ = gamma;
 	d->mustApplyBCG_ = !(d->brightness_ == 0.0 && d->contrast_ == 1.0 && d->gamma_ == 1.0);
 }

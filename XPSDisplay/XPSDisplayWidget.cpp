@@ -223,34 +223,25 @@ void XPSDisplayWidget::updateListFromBatch()
 
 void XPSDisplayWidget::updateContrast(int newValue)
 {
-    qDebug() << "slider value: " << newValue;
-    qDebug() << "i: plot2D_->colorMap().contrast(): " << plot2D_->colorMap().contrast();
-
-    plot2D_->colorMap().setContrast(newValue);
-    plot2D_->update();
-
-    qDebug() << "f: plot2D_->colorMap().contrast(): " << plot2D_->colorMap().contrast();
-
+    MPlotColorMap tempMap = plot2D_->colorMap();
+    tempMap.setContrast(newValue);
+    plot2D_->setColorMap(tempMap);
 
 }
 void XPSDisplayWidget::updateBrightness(int newValue)
 {
-    qDebug() << "i: plot2D_->colorMap().brightness(): " << plot2D_->colorMap().brightness();
     qreal value = 0.1 * newValue;
-    plot2D_->colorMap().setBrightness(value);
-    plot2D_->update();
-    qDebug() << "f: plot2D_->colorMap().brightness(): " << plot2D_->colorMap().brightness();
+    MPlotColorMap tempMap = plot2D_->colorMap();
+    tempMap.setBrightness(value);
+    plot2D_->setColorMap(tempMap);
 
 }
 void XPSDisplayWidget::updateGamma(int newValue)
 {
-
-    plot2D_->colorMap().setGamma(newValue);
-    plot2D_->update();
-
+    MPlotColorMap tempMap = plot2D_->colorMap();
+    tempMap.setGamma(newValue);
+    plot2D_->setColorMap(tempMap);
 }
-
-
 
 
 void XPSDisplayWidget::clearListAndMap()
