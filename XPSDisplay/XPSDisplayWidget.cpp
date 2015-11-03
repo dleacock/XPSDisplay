@@ -45,28 +45,33 @@ XPSDisplayWidget::XPSDisplayWidget(QWidget *parent) :
 	scanListWidget_ = new QListWidget(this);
     addScansButton_ = new QPushButton("Add Scans", this);
     clearScansButton_ = new QPushButton("Clear Map", this);
+    clearScansButton_->setEnabled(false);
 	createMapButton_ = new QPushButton("Create Map", this);
     createMapButton_->setIcon(QIcon("/home/david/code/XPSDisplay/XPSDisplay/start4.png"));
     createMapButton_->setIconSize(QSize(25,25));
+    createMapButton_->setEnabled(false);
 
     contrastLabel_ = new QLabel("Contrast:");
     brightnessLabel_ = new QLabel("Brightness:");
     gammaLabel_ = new QLabel("Gamma:");
 
     contrastSlider_ = new QSlider(Qt::Horizontal, this);
-    contrastSlider_->setRange(-10, 10);
+    contrastSlider_->setRange(-100, 100);
     contrastSlider_->setTickInterval(1);
     contrastSlider_->setValue(1);
+    contrastSlider_->setEnabled(false);
 
     brightnessSlider_ = new QSlider(Qt::Horizontal, this);
-    brightnessSlider_->setRange(-10, 10);
+    brightnessSlider_->setRange(-100, 100);
     brightnessSlider_->setTickInterval(1);
     brightnessSlider_->setValue(0);
+    brightnessSlider_->setEnabled(false);
 
     gammaSlider_ = new QSlider(Qt::Horizontal, this);
-    gammaSlider_->setRange(-10, 10);
+    gammaSlider_->setRange(-100, 100);
     gammaSlider_->setTickInterval(1);
     gammaSlider_->setValue(1);
+    gammaSlider_->setEnabled(false);
 
 	mainLayout_ = new QHBoxLayout;
 	buttonsLayout_ = new QHBoxLayout;
@@ -132,6 +137,7 @@ void XPSDisplayWidget::openFileDialogBatch()
 
         findScanButton_ = new QPushButton("Find Scans");
         addSelectedScansButton_ = new QPushButton("Add Scans");
+        addSelectedScansButton_->setEnabled(false);
 
         listOfScans_ = new QListWidget;
 
@@ -169,12 +175,17 @@ void XPSDisplayWidget::findBatchFiles()
         numberOfScans_ = fileNames.count();
 
 		dialog.close();
+        addSelectedScansButton_->setEnabled(true);
     }
 }
 
 
 void XPSDisplayWidget::addBatchScans()
 {
+    //Enable buttons to allow create/clear
+    createMapButton_->setEnabled(true);
+    clearScansButton_->setEnabled(true);
+
     model_->loadScanFromFiles(fileNames);
     batchAddScanDialog_->close();
 	emit batchScansAdded();
@@ -211,6 +222,11 @@ void XPSDisplayWidget::displayMap()
     }
 
     plotView_->setPlot(plot_);
+
+    //Enable image adjustment tools
+    contrastSlider_->setEnabled(true);
+    gammaSlider_->setEnabled(true);
+    brightnessSlider_->setEnabled(true);
 
 }
 

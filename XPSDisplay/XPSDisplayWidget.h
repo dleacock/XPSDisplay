@@ -102,8 +102,7 @@ protected:
 
 	XPSMapViewModel *model_;
 
-	int numberOfScans_;
-
+    int numberOfScans_;
 
 };
 
